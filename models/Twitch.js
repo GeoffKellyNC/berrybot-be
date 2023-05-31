@@ -12,15 +12,12 @@ exports.getBotConfig = async () => {
     try{
         const collection = db.collection('twitch_bot_config');
 
-        console.log('Getting Bot Config...') //!DEBUG
 
         // check to see if bot config exists
          const botConfig = await collection.findOne({user: 'bot'});
 
-         console.log('Got Bot Config!' + botConfig) //!DEBUG
      
          if(!botConfig) {
-            console.log('No Bot config Found... Adding..') //!DEBUG
              const botConfig = {
                  user: 'bot',
                  twitch_client_id: process.env.TWITCH_CLIENT_ID,
@@ -32,7 +29,7 @@ exports.getBotConfig = async () => {
              }
      
              await collection.insertOne(botConfig)
-             return
+             return botConfig
          }
      
          return botConfig

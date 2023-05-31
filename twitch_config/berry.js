@@ -31,7 +31,7 @@ const createChatClient = async (authProvider) => {
         }
     })
     chatClient.onMessage( async (channel, user, message) => {
-        processMessage(channel, user, message, chatClient )
+        console.log(`${user}: ${message}`)
     })
     berryClient = chatClient
     return chatClient
@@ -50,12 +50,18 @@ const initBerry = async () => {
 
     const authProvider = new RefreshingAuthProvider(
         {
-            twitch_client_id,
-            twitch_client_secret,
+            clientId: twitch_client_id,
+            clientSecret: twitch_client_secret,
             onRefresh: async (newTokenData) => {
                 await refreshConfig(newTokenData)
             }
-        },config )
+        },
+            {
+                "accessToken": config.twitch_access_token,
+                "refreshToken": config.twitch_refresh_token,
+                "expiresIn": 0,
+                "obtainmentTimestamp": 0
+            })
     
     const botClient = await createChatClient(authProvider)
 
