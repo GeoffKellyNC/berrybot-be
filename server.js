@@ -1,32 +1,29 @@
 require("dotenv").config();
 const express = require("express");
-const app = express();
+const server = express();
 const cors = require("cors");
-const http = require("http");
 const excludeWebhookJsonMiddleware = require('./middleware/exludeWebhook') //! ADDED
-const { connect } = require("./db/mongo_config");
+const { connectMongoDB } = require("./db/mongo_config");
 const { initBerry } = require('./twitch_config/berry')
+const authMiddleware = require('./middleware/authMiddleware')
+const criticalError = require('./middleware/criticalError')
 
 
 //* Middleware Functions */
-app.use(cors());
-app.use(excludeWebhookJsonMiddleware);
+server.use(cors());
+server.use(criticalError);
+server.use(excludeWebhookJsonMiddleware);
+server.use(authMiddleware)
 
 //* Routes */
 
 
 
 //* Server */s
-
 // Global Variables
-const server = http.createServer(app);
-
-
-
 
 // Connecting to MongoDB
-connect();
-
+connectMongoDB();
 // Initialize Berry Bot
 initBerry()
 

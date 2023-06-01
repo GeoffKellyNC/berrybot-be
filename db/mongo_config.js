@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 const uri = process.env.MONGO_URI;
 const mongo = new MongoClient(uri);
 
-async function connect() {
+async function connectMongoDB() {
   try {
     await mongo.connect();
     console.log('Connected to Berry Bot Database! 🍓');
@@ -13,6 +13,6 @@ async function connect() {
 }
 
 module.exports = {
-  connect,
+  connectMongoDB,
   mongo
 };
