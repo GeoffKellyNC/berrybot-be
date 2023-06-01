@@ -4,10 +4,7 @@ const { RefreshingAuthProvider } = require('@twurple/auth')
 const { ChatClient } = require('@twurple/chat');
 const consoleLoging = require('../helpers/consoleLoging')
 
-
-
 let berryClient;
-
 
 //* HELPER FUNCTIONS *//
 
