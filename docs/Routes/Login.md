@@ -1,5 +1,3 @@
-Sure! Here's the README content in Markdown format:
-
 ## Route: /login
 
 This route handles the user login process and returns the necessary data and tokens for authentication.
