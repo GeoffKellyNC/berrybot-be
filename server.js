@@ -7,6 +7,7 @@ const { connectMongoDB } = require("./db/mongo_config");
 const { initBerry } = require('./twitch_config/berry')
 const authMiddleware = require('./middleware/authMiddleware')
 const criticalError = require('./middleware/criticalError')
+const authRoutes = require('./routes/authRoutes')
 
 
 //* Middleware Functions */
@@ -16,6 +17,8 @@ server.use(excludeWebhookJsonMiddleware);
 server.use(authMiddleware)
 
 //* Routes */
+server.use('/auth', authRoutes)
+
 
 
 

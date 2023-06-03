@@ -10,7 +10,7 @@ const JWT_SIG = process.env.JWT_SECRET
 
 
 //* Creting A JWT Token.
-exports.createJWT = async () => {
+exports.createJWT = async (unx_id) => {
     try{
         const token = jwt.sign({unx_id}, JWT_SIG, {expiresIn: '24h'});
 

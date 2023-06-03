@@ -1,5 +1,5 @@
 require('dotenv').config()
-const twitchModel = require('../models/Twitch')
+const botModel = require('../models/Bot')
 const { RefreshingAuthProvider } = require('@twurple/auth')
 const { ChatClient } = require('@twurple/chat');
 const consoleLoging = require('../helpers/consoleLoging')
@@ -9,12 +9,12 @@ let berryClient;
 //* HELPER FUNCTIONS *//
 
 const refreshConfig = async (data) => {
-    const oldData = await twitchModel.getBotConfig()
+    const oldData = await botModel.getBotConfig()
     const newData = {
         ...oldData,
         ...data
     }
-    twitchModel.updateBotConfig(newData)
+    botModel.updateBotConfig(newData)
     return
 }
 
@@ -41,7 +41,7 @@ const returnBerryClient = () => {
 
 //* MAIN BERRY FUNCITON
 const initBerry = async () => {
-    const config = await twitchModel.getBotConfig();
+    const config = await botModel.getBotConfig();
     const twitch_client_id = config.twitch_client_id;
     const twitch_client_secret = config.twitch_client_secret;
 
