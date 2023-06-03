@@ -1,22 +1,30 @@
 const express = require('express');
 const userModel = require('../models/User')
 const twitchModel = require('../models/Twitch')
-const authModel = require('../')
+const authModel = require('../models/Auth')
 const AiModel = require('../models/AI')
 const { connectToBerry, runScheduledCommands } = require('../models/Berry');
 const { mongo } = require('../db/mongo_config');
+const consoleLoging = require('../helpers/consoleLoging');
 const router = express.Router();
 
 //* LOGIN ROUTE */
 router.post('/login', async (req, res) => {
     const { code } = req.body.data
 
+    consoleLoging({
+        id: "🚧 DEBUGGING",
+        user: "Server",
+        script: "routes/authRoutes.js (POST /login)",
+        info: "code: " + code
+    }) //! DEBUG
+
     const {
         accessToken,
         expiresIn,
         refreshToken,
         scope
-    } = await userModel.getUserTwitchAccessToken(code)
+    } = await twitchModel.getUserTwitchAccessToken(code)
 
     const { 
         id, 
@@ -28,8 +36,6 @@ router.post('/login', async (req, res) => {
         broadcaster_type,
         created_at,
         description } = await twitchModel.getUserTwitchData(accessToken)
-
-        
 
         const userObject = {
             twitch_id: id,
@@ -50,19 +56,36 @@ router.post('/login', async (req, res) => {
         }
 
         //* user is on Object {user, isNew}
+
+        console.log(' ⛔️ Setting User to Database') //! DEBUG
+
         const {user, isNew} = await userModel.setUserToDb(userObject)
 
+        // console.log(' ⛔️ User Set to Database') //! DEBUG
+
         if(isNew || !user.user_paid){
+            console.log(' ⛔️ User is New or Not Paid') //! DEBUG
             res.status(200).json({messge: 'not_paid', user})
             return
         }
 
+        console.log(' ⛔️ User is Paid') //! DEBUG
+
         const jwtToken = await authModel.createJWT(user.unx_id)
 
+        console.log(' ⛔️ JWT DONE!' + jwtToken) //! DEBUG
+
         await connectToBerry(display_name)
+
+        console.log(' ⛔️ Connected to Berry') //! DEBUG
+
         await runScheduledCommands(display_name, user.unx_id)
 
+        console.log(' ⛔️ Ran Scheduled Commands') //! DEBUG
+
         const aiConfig = await AiModel.getUserAiConfig(user.unx_id)
+
+        console.log(' ⛔️ Got User AI Config') //! DEBUG
 
 
         const payload = {
@@ -70,7 +93,7 @@ router.post('/login', async (req, res) => {
             userData : {
                 twitch_id: user.twitch_id,
                 twitch_login: user.twitch_login,
-                twitch_display_name: user.twitch_display_name,
+                twitch_display: user.twitch_display_name,
                 email: user.email,
                 twitch_image: user.twitch_image,
                 twitch_view_count: user.twitch_view_count,
@@ -84,6 +107,8 @@ router.post('/login', async (req, res) => {
             },
             access_token: accessToken,
         }
+
+        console.log(payload) //! DEBUG
 
         res.status(200).json({message: payload})
 

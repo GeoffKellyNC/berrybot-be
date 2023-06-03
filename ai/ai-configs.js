@@ -1,4 +1,4 @@
-const ai_config_base = {
+const ai_base_config = {
     active: true,
     thresholds: {
       sexual: 0.94,
@@ -48,4 +48,4 @@ const ai_config_base = {
     },
 }
 
-module.exports = { ai_config_base }
+module.exports = { ai_base_config }

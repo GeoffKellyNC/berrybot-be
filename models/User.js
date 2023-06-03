@@ -7,25 +7,7 @@ const { v4: uuid } = require('uuid');
 
 const db = mongo.db(process.env.MONGO_DB_NAME);
 
-//* Getting User Twitch Access Token
-exports.getUserTwitchAccessToken = async (code) => {
-    try {
-        const twitchAccessUrl = constructTwitchAccessUrl(code)
-        const twitchRes = await axios.post(twitchAccessUrl)
 
-        const { access_token, expires_in, refresh_token, scope } = twitchRes.data;
-
-        return { access_token, expires_in, refresh_token, scope}
-
-    } catch (error) {
-        consoleLoging({
-            id: null,
-            user: 'Server',
-            script: 'models/User (getUserTwitchAccessToken())',
-            info: 'Error Getting Twitch Access Token ' + error
-        })
-    }
-}
 
 //* Setting User to Database. 
 exports.setUserToDb = async (userData) => {
@@ -34,7 +16,8 @@ exports.setUserToDb = async (userData) => {
 
         // Use user.email to check if user exists
 
-        const user_exists = collection.findOne({ email: userData.email })
+        const user_exists = await collection.findOne({ email: userData.email })
+
 
         if (user_exists) {
             return {user: user_exists, isNew: false}
@@ -65,7 +48,7 @@ exports.setUserToDb = async (userData) => {
         
     } catch (error) {
         consoleLoging({
-            id: null,
+            id: "ERROR",
             user: 'Server',
             script: 'models/User (getUserTwitchAccessToken())',
             info: 'Error Getting Twitch Access Token ' + error
@@ -73,7 +56,6 @@ exports.setUserToDb = async (userData) => {
     }
 }
 
-exports.checkIsPaid()
 
 
 

@@ -13,10 +13,10 @@ exports.getUserAiConfig = async (unx_id) => {
 
         if (!exists) {
             const newConfig = {
-                unx_id,
+                unx_id: unx_id,
                 ...ai_base_config
             }
-            await collection.insertOne({newConfig})
+            await collection.insertOne(newConfig)
             
             return newConfig
         }

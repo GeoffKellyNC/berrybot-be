@@ -12,9 +12,21 @@ const JWT_SIG = process.env.JWT_SECRET
 //* Creting A JWT Token.
 exports.createJWT = async (unx_id) => {
     try{
+
+        console.log('⛔️ Creating JWT') //!DEBUG
         const token = jwt.sign({unx_id}, JWT_SIG, {expiresIn: '24h'});
 
-        await db.execute(`UPDATE app_users SET session_token = '${token}' WHERE unx_id = '${unx_id}'`)
+        console.log('⛔️ JWT Created in function: ' + token) //!DEBUG
+
+        console.log('⛔️ Setting JWT to DB') //!DEBUG
+
+        const collection = db.collection('app_users')
+
+        // update user with new JWT token
+
+        await collection.updateOne({ unx_id }, { $set: { jwtToken: token } })
+
+        console.log('⛔️ JWT Set to DB') //!DEBUG
 
         return token
     } catch(error){

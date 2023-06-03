@@ -11,7 +11,10 @@ const authRoutes = require('./routes/authRoutes')
 
 
 //* Middleware Functions */
-server.use(cors());
+server.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true
+}));
 server.use(criticalError);
 server.use(excludeWebhookJsonMiddleware);
 server.use(authMiddleware)
