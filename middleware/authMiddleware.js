@@ -1,33 +1,33 @@
 const authModel = require('../models/Auth')
 
-/**
- * This middleware is used to verify a user's JWT token. It is set to run on all routes except for the login route.ß
- */
-
-const authMiddleware = async (req, res, next) => {
-
+async function authMiddleware(req, res, next) {
+    
     if(req.path.includes('login')) {
         return next()
     }
+    
+    const jwtToken = req.cookies.jwtToken;
+    const accessToken = req.cookies.accessToken;
+    const unx_id = req.headers.unx_id;
 
-    const userJWT = req.headers.authorization
-    const unx_id = req.headers.unx_id
-
-    if(!userJWT || !unx_id) {
-        return res.status(401).json({
-            message: 'Unauthorized'
-        })
+    if (!jwtToken || !accessToken) {
+        return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    const isVerified = await authModel.verifyUserJWT(userJWT, unx_id)
+    try {
 
-    if(!isVerified) {
-        return res.status(401).json({
-            message: 'Unauthorized'
-        })
+        const isValidated = await authModel.verifyUserJWT(jwtToken, unx_id)
+    
+
+        if (!isValidated) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        next();
+    } catch (error) {
+        console.error(error);
+        res.status(403).json({ message: 'Invalid token' });
     }
-
-    next()
 }
 
 module.exports = authMiddleware;
