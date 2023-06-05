@@ -8,17 +8,42 @@ const { mongo } = require('../db/mongo_config');
 const consoleLoging = require('../helpers/consoleLoging');
 const router = express.Router();
 
+//? GET ROUTES
+
+//* VERIFY ACCESS TOKEN ROUTE */
+router.get("/verify-accessToken", async (req, res) => {
+    try {
+
+        const twitch_id = req.headers.twitch_id;
+        const accessToken = req.headers.access_token;
+
+        const twitchValid = await authModel.verifyTwitchAccessToken(accessToken, twitch_id)
+
+        if(!twitchValid) {
+            res.status(401).json({message: "Access Token Invalid"})
+            return
+        }
+
+        res.status(200).json({message: "Access Token Valid"})
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            name: "Server",
+            script: "routes/authRoutes.js (POST /verify-accessToken)",
+            info: error
+        })
+        res.status(500).json({message: error})
+        return
+    }
+})
+
+//? POST ROUTES
+
 //* LOGIN ROUTE */
 router.post('/login', async (req, res) => {
     try {
-        const { code } = req.body.data
-
-        consoleLoging({
-            id: "🚧 DEBUGGING",
-            user: "Server",
-            script: "routes/authRoutes.js (POST /login)",
-            info: "code: " + code
-        }) //! DEBUG
+        const { code } = req.body;
     
         const {
             accessToken,
@@ -56,27 +81,17 @@ router.post('/login', async (req, res) => {
                 scope
             }
     
-            //* user is on Object {user, isNew}
-    
-            console.log(' ⛔️ Setting User to Database') //! DEBUG
-    
+            //* user is an Object {user, isNew}
+        
             const {user, isNew} = await userModel.setUserToDb(userObject)
-    
-            if(isNew || !user.user_paid){
-                res.status(200).json({messge: 'not_paid', user})
-            }
-    
+            
             const jwtToken = await authModel.createJWT(user.unx_id)
-    
-            await connectToBerry(display_name)
-    
-            await runScheduledCommands(display_name, user.unx_id)
-    
+            
             const aiConfig = await AiModel.getUserAiConfig(user.unx_id)
-    
+
             const payload = {
-                jwtToken,
-                userData : {
+                userData: {
+                    unx_id: user.unx_id,
                     twitch_id: user.twitch_id,
                     twitch_login: user.twitch_login,
                     twitch_display: user.twitch_display_name,
@@ -86,30 +101,50 @@ router.post('/login', async (req, res) => {
                     twitch_streamer_status: user.twitch_streamer_status,
                     twitch_created_date: user.twitch_created_date,
                     twitch_description: user.twitch_description,
-                    access_token: user.access_token,
                     expiresIn: user.expiresIn,
                     scope: user.scope,
+                    user_paid: user.user_paid,
                     aiConfig
                 },
-                access_token: accessToken,
+                authData: {
+                    jwtToken,
+                    accessToken,
+                    refreshToken
+                }
+            }
+            
+            if(isNew || !user.user_paid){
+                res.status(200).json(payload)
+                return
             }
     
-            console.log(payload) //! DEBUG
-    
-            res.cookie({
-                "jwtToken": jwtToken,
+            await connectToBerry(display_name)
+            await runScheduledCommands(display_name, user.unx_id)
+            
+            res.cookie('jwtToken', jwtToken, {
                 httpOnly: true,
-                // secure: true,
-            })
-    
-            res.cookie({
-                "access_token": accessToken,
-                httpOnly: true,
-                // secure: true,
-            })
-    
-            res.status(200).json({message: payload})
-    
+                sameSite: 'None',
+                secure: true,
+                domain: 'localhost',
+                path: '/dashboard'
+              });
+              
+              res.cookie('accessToken', accessToken, {
+                sameSite: 'None',
+                secure: true,
+                domain: 'localhost',
+                path: '/control-panel'
+              });
+              
+              res.cookie('twitchId', payload.twitch_id, {
+                sameSite: 'None',
+                secure: true,
+                domain: 'localhost',
+                path: '/control-panel'
+              });
+
+            res.status(200).json(payload)
+
     } catch (error) {
         res.status(500).json({message: error})
         consoleLoging({
@@ -120,6 +155,10 @@ router.post('/login', async (req, res) => {
         })
     }
 });
+
+
+
+
 
 
 

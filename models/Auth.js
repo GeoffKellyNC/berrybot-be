@@ -13,12 +13,7 @@ const JWT_SIG = process.env.JWT_SECRET
 exports.createJWT = async (unx_id) => {
     try{
 
-        console.log('⛔️ Creating JWT') //!DEBUG
         const token = jwt.sign({unx_id}, JWT_SIG, {expiresIn: '24h'});
-
-        console.log('⛔️ JWT Created in function: ' + token) //!DEBUG
-
-        console.log('⛔️ Setting JWT to DB') //!DEBUG
 
         const collection = db.collection('app_users')
 
@@ -26,7 +21,6 @@ exports.createJWT = async (unx_id) => {
 
         await collection.updateOne({ unx_id }, { $set: { jwtToken: token } })
 
-        console.log('⛔️ JWT Set to DB') //!DEBUG
 
         return token
     } catch(error){
@@ -43,9 +37,11 @@ exports.createJWT = async (unx_id) => {
 //* Verifiying a user JWT token matches DB.
 exports.verifyUserJWT = async (userJWT, unx_id) => {
     try {
-        const collection = db.collection('twitch_user_config')
+        const collection = db.collection('app_users')
 
-       const storedJWT =  collection.findOne({ unx_id }, { jwtToken: 1 })
+       const { jwtToken } =  await collection.findOne({ unx_id })
+
+       const storedJWT = jwtToken
 
        const isValidated = jwt.verify(userJWT, JWT_SIG, (err, decoded) => {
            if (err) {
@@ -61,6 +57,7 @@ exports.verifyUserJWT = async (userJWT, unx_id) => {
                 script: 'models/Auth.js (verifyJWT)',
                 info: `USER NOT VERIFIED!`
             })
+            console.log('🔐 userJWT = storedJWT: ', userJWT === storedJWT) //!DEBUG
             return false
          }
 
@@ -75,5 +72,31 @@ exports.verifyUserJWT = async (userJWT, unx_id) => {
         })
         return
     }
+}
+
+exports.verifyTwitchAccessToken = async (accessToken, twitchId) => {
+    try {
+        const headers = {
+          'Authorization': `OAuth ${accessToken}`,
+        }
+        const verifiedData = await axios.get('https://id.twitch.tv/oauth2/validate', { headers })
+
+        console.log('🔐 Twitch Access Token Verified!') //!DEBUG
+
+        if (verifiedData.data.user_id === twitchId){
+            return true
+        }
+
+        return false
+        
+      } catch (error) {
+        await consoleLoging({
+            id: "ERROR",
+            name: 'Server',
+            script: 'models/Auth.js (verifyTwitchAccessToken())',
+            info: 'Error Verifing Twitch Access Token ' + error
+        })
+        return
+      }
 }
 
