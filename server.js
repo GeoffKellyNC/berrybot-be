@@ -6,26 +6,16 @@ const cors = require("cors");
 const { connectMongoDB } = require("./db/mongo_config");
 const { initBerry } = require('./twitch_config/berry')
 
+
 //* Middleware */
 const authMiddleware = require('./middleware/authMiddleware')
 const criticalError = require('./middleware/criticalError')
-const authRoutes = require('./routes/authRoutes')
 const cookieParser = require('cookie-parser')
 const requestLogger = require('./middleware/requestLogger')
 const json = require('express').json
 
 
 //* Middleware Functions */
-server.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-}));
-
-server.use(cookieParser())
-server.use(authMiddleware)
-server.use(json())
-server.use(criticalError);
-// server.use(requestLogger);
 
 const excludeWebhookJsonMiddleware = (req, res, next) => {
     if (req.path.includes("webhook")) {
@@ -34,10 +24,23 @@ const excludeWebhookJsonMiddleware = (req, res, next) => {
       express.json()(req, res, next);
     }
   };
+
+server.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
+
+server.use(cookieParser())
+server.use(authMiddleware)
 server.use(excludeWebhookJsonMiddleware);
+server.use(criticalError);
+// server.use(requestLogger);
+
+
 
 //* Routes */
-server.use('/auth', authRoutes)
+server.use('/auth', require('./routes/authRoutes'))
+server.use('/stripe', require('./routes/stripeRoutes'))
 
 
 //* Server */s
