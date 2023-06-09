@@ -1,5 +1,5 @@
 require('dotenv').config()
-const botModel = require('../models/Bot')
+const botModel = require('../models/Twitch/Bot')
 const { RefreshingAuthProvider } = require('@twurple/auth')
 const { ChatClient } = require('@twurple/chat');
 const consoleLoging = require('../helpers/consoleLoging')

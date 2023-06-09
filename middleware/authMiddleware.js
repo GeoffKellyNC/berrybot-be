@@ -1,4 +1,4 @@
-const authModel = require('../models/Auth')
+const authModel = require('../models/Twitch/Auth')
 
 async function authMiddleware(req, res, next) {
 

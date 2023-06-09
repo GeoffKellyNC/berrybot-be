@@ -1,7 +1,7 @@
 require('dotenv').config();
-const { returnBerryClient } = require('../twitch_config/berry');
+const { returnBerryClient } = require('../../twitch_config/berry');
 const axios = require('axios');
-const { mongo } = require('../db/mongo_config')
+const { mongo } = require('../../db/mongo_config')
 
 const intervalIds = new Map();
 const activeCommands = new Map();

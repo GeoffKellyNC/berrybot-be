@@ -1,9 +1,10 @@
 require("dotenv").config()
-const { mongo } = require('../db/mongo_config')
+const { mongo } = require('../../db/mongo_config')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const axios = require('axios')
-const consoleLoging = require('../helpers/consoleLoging')
+const consoleLoging = require('../../helpers/consoleLoging')
+const { google } = require('googleapis');
 
 const db = mongo.db(process.env.MONGO_DB_NAME);
 const JWT_SIG = process.env.JWT_SECRET
@@ -81,7 +82,6 @@ exports.verifyTwitchAccessToken = async (accessToken, twitchId) => {
         }
         const verifiedData = await axios.get('https://id.twitch.tv/oauth2/validate', { headers })
 
-        console.log('🔐 Twitch Access Token Verified!') //!DEBUG
 
         if (verifiedData.data.user_id === twitchId){
             return true
@@ -98,5 +98,44 @@ exports.verifyTwitchAccessToken = async (accessToken, twitchId) => {
         })
         return
       }
+}
+
+exports.getYouTubeLoginURL = async () => {
+    try {
+
+        const oauth2Client = new google.auth.OAuth2(
+            process.env.YT_CLIENT_ID,
+            process.env.YT_CLIENT_SECRET,
+            process.env.LOCAL_MODE ? process.env.YT_LOCAL_REDIRECT_URI : null
+          );
+          
+          // generate a url that asks permissions for Blogger and Google Calendar scopes
+          const scopes = [
+            'https://www.googleapis.com/auth/youtube',
+            'https://www.googleapis.com/auth/youtube.channel-memberships.creator',
+            'https://www.googleapis.com/auth/youtube.force-ssl',
+            'https://www.googleapis.com/auth/youtube.readonly',
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtubepartner',
+            'https://www.googleapis.com/auth/youtubepartner-channel-audit'
+          ];
+          
+          const url = oauth2Client.generateAuthUrl({
+            // 'online' (default) or 'offline' (gets refresh_token)
+          
+            // If you only need one scope you can pass it as a string
+            scope: scopes
+          });
+
+          return url
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            name: 'Server',
+            script: 'models/Auth.js (greateGoogleOAuthLink())',
+            info: 'Error Creating Google OAuth Link ' + error
+        })
+    }
 }
 

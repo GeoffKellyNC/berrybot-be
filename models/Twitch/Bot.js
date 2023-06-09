@@ -1,7 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
-const { mongo } = require('../db/mongo_config');
-const consoleLoging = require('../helpers/consoleLoging')
+const { mongo } = require('../../db/mongo_config');
+const consoleLoging = require('../../helpers/consoleLoging')
 
 //* GLOBAL VARIABLES*/
 

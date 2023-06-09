@@ -1,8 +1,8 @@
 require('dotenv').config();
 const axios = require('axios');
-const { mongo } = require('../db/mongo_config');
-const consoleLoging = require('../helpers/consoleLoging')
-const constructTwitchAccessUrl = require('../helpers/constructAccessUrl')
+const { mongo } = require('../../db/mongo_config');
+const consoleLoging = require('../../helpers/consoleLoging')
+const constructTwitchAccessUrl = require('../../helpers/constructAccessUrl')
 const { v4: uuid } = require('uuid');
 
 const db = mongo.db(process.env.MONGO_DB_NAME);
@@ -16,14 +16,9 @@ exports.setUserToDb = async (userData) => {
 
         // Use user.email to check if user exists
 
-        const user_exists = await collection.findOne({ email: userData.email })
+        const userObject = await collection.findOne({ email: userData.email })
 
-
-        if (user_exists) {
-            return {user: user_exists, isNew: false}
-        }
-
-        const newUser = {
+        const defaultUserObj = {
             unx_id: uuid(),
             email: userData.email,
             twitch_id: userData.twitch_id,
@@ -40,18 +35,29 @@ exports.setUserToDb = async (userData) => {
             client_secret: userData.client_secret,
             created_at: new Date(),
             user_paid: false,
+            applicatoin_type: 'Twitch',
+            stripe_id: null,
+            metaData: {}
         }
 
-        await collection.insertOne(newUser)
 
-        return {user: newUser, isNew: true}
+        if (userObject) {
+            const updatedUserObj = { ...defaultUserObj, ...userObject }
+            await collection.updateOne({ unx_id: userObject.unx_id }, { $set: updatedUserObj })
+            return { user: updatedUserObj, isNew: false }
+        }
+
+        
+        await collection.insertOne(defaultUserObj)
+
+        return {user: defaultUserObj, isNew: true}
         
     } catch (error) {
         consoleLoging({
             id: "ERROR",
             user: 'Server',
-            script: 'models/User (getUserTwitchAccessToken())',
-            info: 'Error Getting Twitch Access Token ' + error
+            script: 'models/Twitch/User.js',
+            info: 'Error setting user to DB ' + error
         })
     }
 }
