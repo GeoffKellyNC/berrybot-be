@@ -38,7 +38,6 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
     switch (event.type) {
       case 'checkout.session.completed':
         const checkoutSessionCompleted = event.data.object;
-        console.log('checkoutSessionCompleted: ', checkoutSessionCompleted) //! REMOVE
 
         const unx_id = session.metadata.unx_id;
 
@@ -53,7 +52,6 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
         return;
       case 'customer.subscription.created':
           const customerSubscriptionCreated = event.data.object;
-          console.log('customerSubscriptionCreated: ', customerSubscriptionCreated) //! REMOVE
           res.status(200).json({ message: 'Webhook received successfully' });
           break;
       case 'invoice.paid':
@@ -67,7 +65,6 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
         return;
       case 'invoice.payment_succeeded':
           const invoicePaymentSucceeded = event.data.object;
-          console.log('invoicePaymentSucceeded: ', invoicePaymentSucceeded) //! REMOVE
           res.status(200).json({ message: 'Webhook received successfully' });
           break;
       case 'customer.subscription.deleted':
@@ -89,10 +86,7 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
 
 
 router.post('/create-checkout-session', async (req, res) => {
-    console.log('CREATE SESSION!!!!: ') //! REMOVE
     const unx_id  = req.query.unx_id
-    console.log('CREATE SESSION QUERY: ', req.query) //! REMOVE
-    console.log('CREATE SESSION UNX ID: ', unx_id) //! REMOVE
     const prices = await stripe.prices.list({
         lookup_keys: [req.body.lookup_key],
         expand: ['data.product']
