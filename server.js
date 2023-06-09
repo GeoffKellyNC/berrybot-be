@@ -17,6 +17,11 @@ const json = require('express').json
 
 //* Middleware Functions */
 
+server.use(cors({
+    origin: '*',
+    credentials: true
+}));
+
 const excludeWebhookJsonMiddleware = (req, res, next) => {
     if (req.path.includes("webhook")) {
       next();
@@ -25,10 +30,6 @@ const excludeWebhookJsonMiddleware = (req, res, next) => {
     }
   };
 
-server.use(cors({
-    origin: '*',
-    credentials: true
-}));
 
 server.use(cookieParser())
 server.use(authMiddleware)
