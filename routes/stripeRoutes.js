@@ -13,6 +13,8 @@ const DOMAIN = process.env.LOCAL_MODE ? 'http://localhost:3000' : 'https://berry
 router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (request,  response) => {
   try{
         const sig = request.headers['stripe-signature'];
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
   
     let event;
   
