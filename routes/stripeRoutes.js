@@ -10,25 +10,25 @@ const DOMAIN = process.env.LOCAL_MODE ? 'http://localhost:3000' : 'https://berry
 
 
 
-router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (request,  response) => {
+router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (req,  res) => {
   try{
-        const sig = request.headers['stripe-signature'];
+        const sig = req.headers['stripe-signature'];
       const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   
     let event;
   
     try {
-      event = stripe.webhooks.constructEvent(request.body, sig, webhookSecret);
+      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
     } catch (err) {
-      response.status(500).send(`Webhook Error: ${err}`);
+      res.status(500).send(`Webhook Error: ${err}`);
       return;
     }
 
     console.log("STRIPE EVENT RECEIVED TYPE: ", event.type) //! REMOVE
     console.log("STRIPE EVENT RECEIVED: ", event.data.object) //! REMOVE
   
-    const reqestBodyFromBuffer = request.body.toString('utf8')
+    const reqestBodyFromBuffer = req.body.toString('utf8')
   
     const session = event.data.object
   
@@ -43,12 +43,12 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
 
         console.log('unx_id: ', unx_id) //! REMOVE
 
-        if(!unx_id) return response.status(200).json({ message: 'Webhook received successfully' });
+        if(!unx_id) return res.status(200).json({ message: 'Webhook received successfully' });
 
         // await User.setStripeCustomerId(customerId, unx_id);
         // await User.updateStripePaid(customerId)
 
-        response.status(200).json({ message: 'Webhook received successfully' });
+        res.status(200).json({ message: 'Webhook received successfully' });
         return;
       case 'customer.subscription.created':
           const customerSubscriptionCreated = event.data.object;
@@ -56,12 +56,12 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
           break;
       case 'invoice.paid':
         // await User.updateStripePaid(customerId)
-        response.status(200).json({ message: 'Webhook received successfully' });
+        res.status(200).json({ message: 'Webhook received successfully' });
         return;
   
       case 'invoice.payment_failed':
         // await User.cancelSubscription(customerId)
-        response.status(200).json({ message: 'Webhook received successfully' });
+        res.status(200).json({ message: 'Webhook received successfully' });
         return;
       case 'invoice.payment_succeeded':
           const invoicePaymentSucceeded = event.data.object;
@@ -69,18 +69,18 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
           break;
       case 'customer.subscription.deleted':
         // await User.cancelSubscription(customerId)
-        response.status(200).json({ message: 'Webhook received successfully' });
+        res.status(200).json({ message: 'Webhook received successfully' });
         return;
       default:
         console.log(`Unhandled event type ${event.type}`);
-        response.status(200).json({ message: 'Webhook received successfully' });
+        res.status(200).json({ message: 'Webhook received successfully' });
         return; 
     }
   
     return
   } catch (error) {
     console.error(error);
-    response.status(400).send(`Webhook Error: ${error.message}`);
+    res.status(400).send(`Webhook Error: ${error.message}`);
   }
   });
 
