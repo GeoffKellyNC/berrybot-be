@@ -3,7 +3,7 @@ const express = require("express");
 const { mongo } = require("../db/mongo_config");
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_KEY);
-const UserModel = require('../models/User')
+const UserModel = require('../models/Twitch/User')
 
 
 
