@@ -3,6 +3,7 @@ const express = require("express");
 const { mongo } = require("../db/mongo_config");
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_KEY);
+const UserModel = require('../models/User')
 
 
 
@@ -26,7 +27,6 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
     }
 
     console.log("STRIPE EVENT RECEIVED TYPE: ", event.type) //! REMOVE
-    console.log("STRIPE EVENT RECEIVED: ", event.data.object) //! REMOVE
   
     const reqestBodyFromBuffer = req.body.toString('utf8')
   
@@ -45,8 +45,7 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
 
         if(!unx_id) return res.status(200).json({ message: 'Webhook received successfully' });
 
-        // await User.setStripeCustomerId(customerId, unx_id);
-        // await User.updateStripePaid(customerId)
+        await UserModel.setStripeCustomerId(customerId, unx_id);
 
         res.status(200).json({ message: 'Webhook received successfully' });
         return;
@@ -55,20 +54,19 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
           res.status(200).json({ message: 'Webhook received successfully' });
           break;
       case 'invoice.paid':
-        // await User.updateStripePaid(customerId)
         res.status(200).json({ message: 'Webhook received successfully' });
         return;
   
       case 'invoice.payment_failed':
-        // await User.cancelSubscription(customerId)
+        await UserModel.updateStripePaid(customerId, 'unpaid')
         res.status(200).json({ message: 'Webhook received successfully' });
         return;
       case 'invoice.payment_succeeded':
-          const invoicePaymentSucceeded = event.data.object;
+          await UserModel.updateStripePaid(customerId, 'paid')
           res.status(200).json({ message: 'Webhook received successfully' });
           break;
       case 'customer.subscription.deleted':
-        // await User.cancelSubscription(customerId)
+        await UserModel.updateStripePaid(customerId, 'unpaid')
         res.status(200).json({ message: 'Webhook received successfully' });
         return;
       default:

@@ -62,6 +62,54 @@ exports.setUserToDb = async (userData) => {
     }
 }
 
+exports.setStripeCustomerId = async (customerId, unx_id) => {
+    try {
+        const collection = db.collection('app_users')
+
+        await collection.updateOne({ unx_id }, { $set: { stripe_id: customerId } })
+
+        return true
+        
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error setting stripe customer id to DB ' + error
+        })
+
+        return false
+    }
+}
+
+exports.updatePaidStatus = async (customerId, action) => {
+    try {
+        const collection = db.collection('app_users')
+
+        switch (action) {
+            case 'paid':
+                await collection.updateOne({ stripe_id: customerId }, { $set: { user_paid: true } })
+                return true
+            case 'unpaid':
+                await collection.updateOne({ stripe_id: customerId }, { $set: { user_paid: false } })
+                return true
+            default:
+                return false
+        }
+                
+        
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error updating paid status to DB ' + error
+        })
+
+        return false
+    }
+}
+
 
 
 
