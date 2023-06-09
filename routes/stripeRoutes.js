@@ -2,6 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const { mongo } = require("../db/mongo_config");
 const router = express.Router();
+const stripe = require('stripe')(process.env.STRIPE_KEY);
+
+
+
+const DOMAIN = process.env.LOCAL_MODE ? 'http://localhost:3000' : 'https://berrythebot.app/'
+
 
 
 router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (request,  response) => {
@@ -55,7 +61,7 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
   });
 
 
-router.post('/stripe-checkout-session', async (req, res) => {
+router.post('/create-checkout-session', async (req, res) => {
     console.log('CREATE SESSION!!!!: ') //! REMOVE
     const unx_id  = req.query.unx_id
     console.log('CREATE SESSION QUERY: ', req.query) //! REMOVE

@@ -1,6 +1,6 @@
 const axios = require('axios')
-const consoleLoging = require('../helpers/consoleLoging')
-const constructTwitchAccessUrl = require('../helpers/constructAccessUrl')
+const consoleLoging = require('../../helpers/consoleLoging')
+const constructTwitchAccessUrl = require('../../helpers/constructAccessUrl')
 
 //* Getting User Twitch Access Token
 exports.getUserTwitchAccessToken = async (code) => {

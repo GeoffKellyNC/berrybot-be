@@ -1,7 +1,7 @@
 const axios = require('axios')
-const { mongo } = require('../db/mongo_config');
-const consoleLoging = require('../helpers/consoleLoging')
-const { ai_base_config } = require('../ai/ai-configs')
+const { mongo } = require('../../db/mongo_config');
+const consoleLoging = require('../../helpers/consoleLoging')
+const { ai_base_config } = require('../../ai/ai-configs')
 
 const db = mongo.db(process.env.MONGO_DB_NAME);
 

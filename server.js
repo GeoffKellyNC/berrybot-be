@@ -38,9 +38,14 @@ server.use(criticalError);
 
 
 
-//* Routes */
-server.use('/auth', require('./routes/authRoutes'))
-server.use('/stripe', require('./routes/stripeRoutes'))
+//* Twitch Routes */
+server.use('/auth', require('./routes/Twitch/authRoutes'))
+
+//* YouTube Routes */
+server.use('/youtube/auth', require('./routes/YouTube/authRouteYT'))
+
+
+server.use('/payments', require('./routes/stripeRoutes'))
 
 
 //* Server */s

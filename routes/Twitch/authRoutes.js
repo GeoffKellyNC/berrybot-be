@@ -1,11 +1,11 @@
 const express = require('express');
-const userModel = require('../models/User')
-const twitchModel = require('../models/Twitch')
-const authModel = require('../models/Auth')
-const AiModel = require('../models/AI')
-const { connectToBerry, runScheduledCommands } = require('../models/Berry');
-const { mongo } = require('../db/mongo_config');
-const consoleLoging = require('../helpers/consoleLoging');
+const userModel = require('../../models/Twitch/User')
+const twitchModel = require('../../models/Twitch/Twitch')
+const authModel = require('../../models/Twitch/Auth')
+const AiModel = require('../../models/Twitch/AI')
+const { connectToBerry, runScheduledCommands } = require('../../models/Twitch/Berry');
+const { mongo } = require('../../db/mongo_config');
+const consoleLoging = require('../../helpers/consoleLoging');
 const router = express.Router();
 
 //? GET ROUTES
@@ -40,7 +40,7 @@ router.get("/verify-accessToken", async (req, res) => {
 
 //? POST ROUTES
 
-//* LOGIN ROUTE */
+//* LOGIN ROUTE - TWITCH */
 router.post('/login', async (req, res) => {
     try {
         const { code } = req.body;
@@ -84,6 +84,8 @@ router.post('/login', async (req, res) => {
             //* user is an Object {user, isNew}
         
             const {user, isNew} = await userModel.setUserToDb(userObject)
+
+            console.log('⛔️ user: ', user) //!DEBUG
             
             const jwtToken = await authModel.createJWT(user.unx_id)
             
@@ -155,6 +157,7 @@ router.post('/login', async (req, res) => {
         })
     }
 });
+
 
 
 
