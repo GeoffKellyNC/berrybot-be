@@ -58,15 +58,15 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
         return;
   
       case 'invoice.payment_failed':
-        await UserModel.updateStripePaid(customerId, 'unpaid')
+        await UserModel.updatePaidStatus(customerId, 'unpaid')
         res.status(200).json({ message: 'Webhook received successfully' });
         return;
       case 'invoice.payment_succeeded':
-          await UserModel.updateStripePaid(customerId, 'paid')
+          await UserModel.updatePaidStatus(customerId, 'paid')
           res.status(200).json({ message: 'Webhook received successfully' });
           break;
       case 'customer.subscription.deleted':
-        await UserModel.updateStripePaid(customerId, 'unpaid')
+        await UserModel.updatePaidStatus(customerId, 'unpaid')
         res.status(200).json({ message: 'Webhook received successfully' });
         return;
       default:
