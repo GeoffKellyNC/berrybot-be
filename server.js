@@ -25,10 +25,24 @@ const excludeWebhookJsonMiddleware = (req, res, next) => {
     }
   };
 
-server.use(cors({
-    origin: 'http://localhost:3000',
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://stripe.com',
+    'https://api.berrythebot.app',
+    'https://checkout.stripe.com'
+  ];
+  
+  server.use(cors({
+    origin: function (origin, callback) {
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true
-}));
+  }));
+  
 
 server.use(cookieParser())
 server.use(authMiddleware)

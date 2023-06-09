@@ -21,6 +21,9 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
       response.status(500).send(`Webhook Error: ${err}`);
       return;
     }
+
+    console.log("STRIPE EVENT RECEIVED TYPE: ", event.type) //! REMOVE
+    console.log("STRIPE EVENT RECEIVED: ", event.data.object) //! REMOVE
   
     const reqestBodyFromBuffer = request.body.toString('utf8')
   
@@ -31,24 +34,39 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
     // Handle the event
     switch (event.type) {
       case 'checkout.session.completed':
+        const checkoutSessionCompleted = event.data.object;
+        console.log('checkoutSessionCompleted: ', checkoutSessionCompleted) //! REMOVE
+
         const unx_id = session.metadata.unx_id;
+
+        console.log('unx_id: ', unx_id) //! REMOVE
+
         if(!unx_id) return response.status(200).json({ message: 'Webhook received successfully' });
-        await User.setStripeCustomerId(customerId, unx_id);
-        await User.updateStripePaid(customerId)
+
+        // await User.setStripeCustomerId(customerId, unx_id);
+        // await User.updateStripePaid(customerId)
+
         response.status(200).json({ message: 'Webhook received successfully' });
         return;
-  
+      case 'customer.subscription.created':
+          const customerSubscriptionCreated = event.data.object;
+          console.log('customerSubscriptionCreated: ', customerSubscriptionCreated) //! REMOVE
+          break;
       case 'invoice.paid':
-        await User.updateStripePaid(customerId)
+        // await User.updateStripePaid(customerId)
         response.status(200).json({ message: 'Webhook received successfully' });
         return;
   
       case 'invoice.payment_failed':
-        await User.cancelSubscription(customerId)
+        // await User.cancelSubscription(customerId)
         response.status(200).json({ message: 'Webhook received successfully' });
         return;
+      case 'invoice.payment_succeeded':
+          const invoicePaymentSucceeded = event.data.object;
+          console.log('invoicePaymentSucceeded: ', invoicePaymentSucceeded) //! REMOVE
+          break;
       case 'customer.subscription.deleted':
-        await User.cancelSubscription(customerId)
+        // await User.cancelSubscription(customerId)
         response.status(200).json({ message: 'Webhook received successfully' });
         return;
       default:
