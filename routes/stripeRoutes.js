@@ -54,6 +54,7 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
       case 'customer.subscription.created':
           const customerSubscriptionCreated = event.data.object;
           console.log('customerSubscriptionCreated: ', customerSubscriptionCreated) //! REMOVE
+          res.status(200).json({ message: 'Webhook received successfully' });
           break;
       case 'invoice.paid':
         // await User.updateStripePaid(customerId)
@@ -67,6 +68,7 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
       case 'invoice.payment_succeeded':
           const invoicePaymentSucceeded = event.data.object;
           console.log('invoicePaymentSucceeded: ', invoicePaymentSucceeded) //! REMOVE
+          res.status(200).json({ message: 'Webhook received successfully' });
           break;
       case 'customer.subscription.deleted':
         // await User.cancelSubscription(customerId)
