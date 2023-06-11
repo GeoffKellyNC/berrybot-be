@@ -100,7 +100,7 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
 
             console.log('⛔️ AD RES: ', res) //!DEBUG
 
-          return res.data
+          return res
         
     } catch (error) {
         console.log('⛔️ ERROR RUNNING AD: ', error.response.data) //!DEBUG
