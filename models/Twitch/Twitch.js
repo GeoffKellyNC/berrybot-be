@@ -81,6 +81,7 @@ exports.getUserTwitchStreamData = async ( accessToken, twitchId ) => {
 
 exports.runTwitchAd = async (accessToken, twitchId, duration) => {
     try {
+        console.log('⛔️ RUNNING TWITCH AD ⛔️') //!DEBUG
         const headers = {
             Authorization: `Bearer ${accessToken}`,
             "Client-ID": process.env.TWITCH_CLIENT_ID,
@@ -97,16 +98,19 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
             { headers }
           );
 
+            console.log('⛔️ RES: ', res.data) //!DEBUG
+
           return res.data
         
     } catch (error) {
+        console.log('⛔️ ERROR RUNNING AD: ', error.response) //!DEBUG
         consoleLoging({
             id: null,
             user: 'Server',
             script: '/models/Twitch.sj (runTwitchAd)',
-            info: 'There was a user getting data from Twitch API ' + error
+            info: 'There was a user getting data from Twitch API ' + error.response.data
         })
-        return error
+        return error.resonse.data
     }
 }
 
