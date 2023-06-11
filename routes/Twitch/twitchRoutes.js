@@ -51,14 +51,14 @@ router.post('/run-twitch-ad', async (req, res) => {
 
         console.log('⛔️ RUN AD twitchRoutes.js: ', runAd) //!DEBUG
 
-        // if(runAd.error || runAd.status === 400) {
-        //     res.status(400).json(runAd)
-        //     return
-        // }
+        if(runAd.error || runAd.status === 400) {
+            res.status(400).json(runAd)
+            return
+        }
 
-        // console.logg('⛔️ RUN AD: ', runAd) //!DEBUG
+        console.logg('⛔️ RUN AD: ', runAd) //!DEBUG
 
-        // res.status(200).json(runAd)
+        res.status(200).json(runAd)
 
         
     } catch (error) {

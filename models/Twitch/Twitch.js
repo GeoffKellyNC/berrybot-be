@@ -98,13 +98,19 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
             { headers }
           );
 
-            console.log('⛔️ AD RES: RES: ', res) //!DEBUG
+            console.log('⛔️ RES: ', res.data) //!DEBUG
 
           return res.data
         
     } catch (error) {
         console.log('⛔️ ERROR RUNNING AD: ', error.response.data) //!DEBUG
-        return error.resonse.data
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (runTwitchAd)',
+            info: 'There was an ERROR getting data from Twitch API ' + error.response.data
+        })
+        return error.response.data
     }
 }
 
