@@ -104,7 +104,7 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
         
     } catch (error) {
         console.log('⛔️ ERROR RUNNING AD: ', error.response.data) //!DEBUG
-        return error.resonse
+        return error.resonse.data
     }
 }
 
