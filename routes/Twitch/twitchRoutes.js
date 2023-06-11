@@ -38,7 +38,9 @@ router.post('/run-twitch-ad', async (req, res) => {
         const twitch_id = req.headers.twitch_id;
         const accessToken = req.headers.access_token;
 
-        const duration = req.body
+        const duration = req.body.duration;
+
+        console.logg('⛔️ DURATION: ', duration) //!DEBUG
         
         if(!duration) {
             res.status(400).json({error: 'Duration not provided'})
@@ -46,6 +48,8 @@ router.post('/run-twitch-ad', async (req, res) => {
         }
 
         const runAd = await TwitchModel.runTwitchAd(accessToken, twitch_id, duration)
+
+        console.logg('⛔️ RUN AD: ', runAd) //!DEBUG
 
         res.status(200).json(runAd)
 
