@@ -89,7 +89,7 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
 
         const body = {
             broadcaster_id: twitchId,
-            length: duration,
+            length: parseInt(duration),
           };
 
           const res = await axios.post(
