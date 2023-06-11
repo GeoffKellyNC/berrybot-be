@@ -40,7 +40,7 @@ router.post('/run-twitch-ad', async (req, res) => {
 
         const duration = req.body.duration;
 
-        console.logg('⛔️ DURATION: ', duration) //!DEBUG
+        console.log('⛔️ DURATION: ', duration) //!DEBUG
         
         if(!duration) {
             res.status(400).json({error: 'Duration not provided'})
