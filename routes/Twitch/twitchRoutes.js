@@ -49,6 +49,11 @@ router.post('/run-twitch-ad', async (req, res) => {
 
         const runAd = await TwitchModel.runTwitchAd(accessToken, twitch_id, duration)
 
+        if(runAd.error || runAd.status === 400) {
+            res.status(400).json(runAd)
+            return
+        }
+
         console.logg('⛔️ RUN AD: ', runAd) //!DEBUG
 
         res.status(200).json(runAd)
@@ -61,8 +66,6 @@ router.post('/run-twitch-ad', async (req, res) => {
             script: 'routes/Twitch/twitchRoutes.js',
             info: 'Error running Twitch Ad ' + error
         })
-
-        res.status(500).json({error: 'Error running Twitch Ad'})
     }
 })
 
