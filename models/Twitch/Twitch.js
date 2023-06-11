@@ -78,3 +78,35 @@ exports.getUserTwitchStreamData = async ( accessToken, twitchId ) => {
         return error
     }
 }
+
+exports.runTwitchAd = async (accessToken, twitchId, duration) => {
+    try {
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+            "Client-ID": process.env.TWITCH_CLIENT_ID,
+        }
+
+        const body = {
+            broadcaster_id: twitchId,
+            length: duration,
+          };
+
+          const res = await axios.post(
+            "https://api.twitch.tv/helix/channels/commercial",
+            body,
+            { headers }
+          );
+
+          return res.data
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (runTwitchAd)',
+            info: 'There was a user getting data from Twitch API ' + error
+        })
+        return error
+    }
+}
+
