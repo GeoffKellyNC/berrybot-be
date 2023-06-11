@@ -66,8 +66,6 @@ exports.getUserTwitchStreamData = async ( accessToken, twitchId ) => {
 
         const twitchRes = await axios.get(`https://api.twitch.tv/helix/streams?user_id=${twitchId}`, { headers: headers})
 
-        console.log('STREAM RES', twitchRes.data) //!DEBUG
-
         return twitchRes.data
         
     } catch (error) {
