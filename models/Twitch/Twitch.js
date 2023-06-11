@@ -64,7 +64,7 @@ exports.getUserTwitchStreamData = async ( accessToken, twitchId ) => {
             "Client-ID": process.env.TWITCH_CLIENT_ID,
         }
 
-        const twitchRes = axios.get(`https://api.twitch.tv/helix/streams?user_id=${twitchId}`, { headers: headers})
+        const twitchRes = await axios.get(`https://api.twitch.tv/helix/streams?user_id=${twitchId}`, { headers: headers})
 
         console.log('STREAM RES', twitchRes) //!DEBUG
 
