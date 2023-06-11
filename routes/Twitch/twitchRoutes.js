@@ -1,6 +1,6 @@
 const express = require('express');
-const TwitchModel = require('../../models/Twitch/twitchModel')
-const authModel = require('../../models/Twitch/authModel')
+const TwitchModel = require('../../models/Twitch/Twitch')
+const authModel = require('../../models/Twitch/Auth')
 const consoleLoging = require('../../helpers/consoleLoging');
 const router = express.Router();
 
