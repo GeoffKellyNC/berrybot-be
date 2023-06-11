@@ -25,7 +25,7 @@ router.post('/get-current-stream-data', async (req, res) => {
         consoleLoging({
             id: null,
             user: 'Server',
-            script: 'routes/Twitch/twitchRoutes.js',
+            script: 'routes/Twitch/twitchRoutes.js (POST /get-current-stream-data)',
             info: 'Error getting current stream data ' + error
         })
 
@@ -63,7 +63,7 @@ router.post('/run-twitch-ad', async (req, res) => {
         consoleLoging({
             id: null,
             user: 'Server',
-            script: 'routes/Twitch/twitchRoutes.js',
+            script: 'routes/Twitch/twitchRoutes.js (POST /run-twitch-ad)',
             info: 'Error running Twitch Ad ' + error
         })
     }

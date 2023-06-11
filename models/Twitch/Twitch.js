@@ -108,7 +108,7 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
             id: null,
             user: 'Server',
             script: '/models/Twitch.sj (runTwitchAd)',
-            info: 'There was a user getting data from Twitch API ' + error.response.data
+            info: 'There was a error getting data from Twitch API ' + error.response.data
         })
         return error.resonse.data
     }
