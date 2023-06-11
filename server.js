@@ -41,6 +41,7 @@ server.use(criticalError);
 
 //* Twitch Routes */
 server.use('/auth', require('./routes/Twitch/authRoutes'))
+server.use('/twitch', require('./routes/Twitch/twitchRoutes'))
 
 //* YouTube Routes */
 server.use('/youtube/auth', require('./routes/YouTube/authRouteYT'))

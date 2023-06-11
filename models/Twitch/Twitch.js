@@ -52,5 +52,29 @@ exports.getUserTwitchData = async (accessToken) => {
             script: '/models/Twitch.sj (getUserTwitchData)',
             info: 'There was a user getting data from Twitch API ' + error
         })
+        return error
+    }
+}
+
+
+exports.getUserTwitchStreamData = async ( accessToken, twitchId ) => {
+    try {
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+            "Client-ID": process.env.TWITCH_CLIENT_ID,
+        }
+
+        const twitchRes = axios.get(`https://api.twitch.tv/helix/streams?user_id=${twitchId}`, { headers: headers})
+
+        return twitchRes.data.data
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (getUserTwitchStreamData)',
+            info: 'There was a user getting data from Twitch API ' + error
+        })
+        return error
     }
 }
