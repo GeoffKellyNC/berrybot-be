@@ -143,6 +143,7 @@ exports.startTwitchPoll = async (accessToken, twitchId, pollOptions, pollTitle, 
             script: '/models/Twitch.sj (StartTwitchPoll)',
             info: 'There was an ERROR getting data from Twitch API ' + error.response.data
         })
+        console.log('⛔️ POLL ERROR: ', error.response.data) //!DEBUG
     }
 }
 
