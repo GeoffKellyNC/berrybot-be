@@ -110,7 +110,7 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
     }
 }
 
-exports.StartTwitchPoll = async (accessToken, twitchId, pollOptions, pollTitle, duration) => {
+exports.startTwitchPoll = async (accessToken, twitchId, pollOptions, pollTitle, duration) => {
     try {
         const headers = {
             Authorization: `Bearer ${accessToken}`,
