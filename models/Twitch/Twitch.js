@@ -81,7 +81,6 @@ exports.getUserTwitchStreamData = async ( accessToken, twitchId ) => {
 
 exports.runTwitchAd = async (accessToken, twitchId, duration) => {
     try {
-        console.log('⛔️ RUNNING TWITCH AD ⛔️') //!DEBUG
         const headers = {
             Authorization: `Bearer ${accessToken}`,
             "Client-ID": process.env.TWITCH_CLIENT_ID,
@@ -98,12 +97,9 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
             { headers }
           );
 
-            console.log('⛔️ RES: ', res.data) //!DEBUG
-
           return res.data
         
     } catch (error) {
-        console.log('⛔️ ERROR RUNNING AD: ', error.response.data) //!DEBUG
         consoleLoging({
             id: null,
             user: 'Server',
@@ -113,4 +109,42 @@ exports.runTwitchAd = async (accessToken, twitchId, duration) => {
         return error.response.data
     }
 }
+
+exports.StartTwitchPoll = async (accessToken, twitchId, pollOptions, pollTitle, duration) => {
+    try {
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+            "Client-ID": process.env.TWITCH_CLIENT_ID,
+        }
+
+        let formattedPollOptions = []
+
+        pollOptions.forEach(option => {
+            formattedPollOptions.push({title: option})
+        })
+
+
+        const body = {
+            broadcaster_id: twitchId,
+            title: pollTitle,
+            choices: formattedPollOptions,
+            duration: parseInt(duration)
+        }
+
+        console.log('⛔️ STARTING POLL BODY ⛔️', body) //!DEBUG
+        const res = await axios.post('https://api.twitch.tv/helix/polls', body, { headers })
+
+        console.log('⛔️ STARTING POLL RES ⛔️', res.data) //!DEBUG
+
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (StartTwitchPoll)',
+            info: 'There was an ERROR getting data from Twitch API ' + error.response.data
+        })
+    }
+}
+
+
 
