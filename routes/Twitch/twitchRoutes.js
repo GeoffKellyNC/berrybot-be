@@ -74,9 +74,6 @@ router.post('/start-twitch-poll', async (req, res) => {
 
         const { pollOptions, title, duration } = req.body;
 
-        console.log('⛔️ pollOptions', pollOptions) //!DEBUG
-        console.log('⛔️ title', title) //!DEBUG
-        console.log('⛔️ duration', duration) //!DEBUG
 
         if(!pollOptions || !title || !duration) {
             res.status(400).json({error: 'Missing required fields'})
