@@ -147,12 +147,6 @@ router.post('/update-twitch-chat-settings', async (req, res) => {
 
         console.log('⛔️ Twitch Chat Settings', setting, value)
 
-
-        if(!setting || !value) {
-            res.status(404).json({error: 'Missing required fields'})
-            return
-        }
-
         const update = await TwitchModel.updateTwitchChatSettings(twitch_id, accessToken, setting, value)
 
         res.status(200).json(update.data)
