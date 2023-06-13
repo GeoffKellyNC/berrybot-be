@@ -7,7 +7,7 @@ const router = express.Router();
 
 //? GET ROUTES
 
-exports.get('/get-twitch-chat-settings', async (req, res) => {
+router.get('/get-twitch-chat-settings', async (req, res) => {
     try {
         const twitch_id = req.headers.twitch_id;
         const accessToken = req.headers.access_token;
