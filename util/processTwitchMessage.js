@@ -3,7 +3,7 @@ const axios = require('axios')
 const runAskBerryModel = require('../ai/askBerryModel')
 const UserModel = require('../models/Twitch/User')
 const TrainingModel = require('../models/Twitch/Training')
-const TwitchModel = require('../models/Twtitch/Twitch')
+const TwitchModel = require('../models/Twitch/Twitch')
 
  
 const processMessage = async (channel, user, message, chatClient) => {
