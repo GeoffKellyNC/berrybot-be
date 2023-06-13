@@ -311,6 +311,35 @@ exports.getTwitchChatSettings = async (twitch_id, accessToken) => {
         })
     }
 }
+
+exports.updateTwitchChatSettings = async (twitch_id, accessToken, setting, value) => {
+    try {
+
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+            "Client-ID": process.env.TWITCH_CLIENT_ID,
+            "Content-Type": "application/json"
+        };
+
+        const body = {
+            [setting]: value
+        }
+
+        const res = await axios.patch(`https://api.twitch.tv/helix/chat/settings?broadcaster_id=${twitch_id}&moderator_id=${twitch_id}`, body, { headers })
+
+        return res.data
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (updateTwitchSettings)',
+            info: 'There was an ERROR getting data from Twitch API ' + error
+        })
+
+        return false
+    }
+}
   
 
 

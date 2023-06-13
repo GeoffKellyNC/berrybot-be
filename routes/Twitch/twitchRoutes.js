@@ -139,6 +139,32 @@ router.post('/create-twitch-clip', async (req, res) => {
     }
 })
 
+router.post('/update-twitch-chat-settings', async (req, res) => {
+    try {
+        const twitch_id = req.headers.twitch_id;
+        const accessToken = req.headers.access_token;
+        const { setting, value } = req.body;
+
+        if(!setting || !value) {
+            res.status(400).json({error: 'Missing required fields'})
+            return
+        }
+
+        const update = await TwitchModel.updateTwitchChatSettings(twitch_id, accessToken, setting, value)
+
+        res.status(200).json(update.data)
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            name: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (POST /update-twitch-chat-settings)',
+            info: 'Error updating Twitch Chat Settings ' + error
+        })
+        res.status(500).json({error: 'Error updating Twitch Chat Settings'})
+    }
+})
+
 
 
 module.exports = router;
