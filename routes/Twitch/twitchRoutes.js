@@ -36,7 +36,7 @@ router.get('/get-twitch-chat-settings', async (req, res) => {
 
 router.get('/get-stripe-id', async (req, res) => {
     try {
-        const twitch_login = req.body;
+        const twitch_login = req.params.twitch_login;
 
         console.log('⛔️ twitch_login: ', twitch_login) //!DEBUG
 
