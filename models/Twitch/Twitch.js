@@ -149,4 +149,121 @@ exports.startTwitchPoll = async (accessToken, twitchId, pollOptions, pollTitle, 
 }
 
 
+exports.processCustomCommand = async (channel,  message, chatClient) => {
+
+
+    const collection = db.collection('user_custom_commands')
+      
+    const query = { twitch_name: channel.slice(1) }
+  
+    const commands = await collection.find(query).toArray()
+
+
+    for (let key in commands){
+
+        if(message === commands[key].prompt){
+            await chatClient.say(channel, commands[key].action)
+            return
+        }
+    }
+
+    return
+    
+}
+
+exports.banUserApi = async (clientId, accessToken, twitch_id, banId, reason) => {
+    try {
+         await axios.post(
+             `https://api.twitch.tv/helix/moderation/bans?broadcaster_id=${twitch_id}&moderator_id=${twitch_id}`, 
+             {
+             data: 
+             { 
+                 user_id: banId, 
+                 reason: reason
+             }
+             },
+         
+             { 
+             headers: 
+                 { 
+                 Authorization: `Bearer ${accessToken}`, 
+                 "Client-Id": `${process.env.TWITCH_CLIENT_ID}`
+                 }
+             });
+         console.log('BANNED USER SUCCESS: ', banId) //!REMOVE
+
+         return true
+ 
+    } catch (error) {
+         consoleLoging({
+                id: null,
+                user: 'Server',
+                script: '/models/Twitch.sj (banUserApi)',
+                info: 'There was an ERROR getting data from Twitch API ' + error.response.data
+         })
+         return false
+    }
+   }
+
+exports.timeoutUserApi = async (clientId, accessToken, twitch_id, userId, reason, time) => {
+    try {
+        await axios.post(
+            `https://api.twitch.tv/helix/moderation/bans?broadcaster_id=${twitch_id}&moderator_id=${twitch_id}`, 
+            {
+            data: 
+            { 
+                user_id: userId, 
+                duration: time,
+                reason: reason
+            }
+            },
+        
+            { 
+            headers: 
+                { 
+                Authorization: `Bearer ${accessToken}`, 
+                "Client-Id": `${clientId}`
+                }
+            });
+
+
+        return true
+
+   } catch (error) {
+       consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (timeoutUserApi)',
+            info: 'There was an ERROR getting data from Twitch API ' + error.response.data
+       })
+       return false
+   }
+}
+
+
+exports.getUserIdByName =  async (userName, clientId, accessToken) => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-ID": clientId,
+        "Content-Type": "application/json"
+      }
+      const res = await axios.get(`https://api.twitch.tv/helix/users?login=${userName}`, { headers })
+
+      
+      return res.data.data[0]
+
+    } catch (error) {
+      consoleLoging({
+        id: null,
+        user: 'Server',
+        script: '/models/Twitch.sj (getUserIdByName)',
+        info: 'There was an ERROR getting data from Twitch API ' + error.response.data
+      })
+        return error.response.data
+      
+    }
+  }
+
+
 

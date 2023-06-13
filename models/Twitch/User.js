@@ -7,14 +7,10 @@ const { v4: uuid } = require('uuid');
 
 const db = mongo.db(process.env.MONGO_DB_NAME);
 
-
-
 //* Setting User to Database. 
 exports.setUserToDb = async (userData) => {
     try {
         const collection = db.collection('app_users')
-
-        // Use user.email to check if user exists
 
         const userObject = await collection.findOne({ email: userData.email })
 
@@ -109,6 +105,130 @@ exports.updatePaidStatus = async (customerId, action) => {
         return false
     }
 }
+
+//* MessageObj: {twitch_name, chatter_name, message, flagged, reason, confidence_fixed, confidence_raw, ai_scores}
+
+exports.logChatMessage = async (messageObj) => {
+    try {
+        const {
+            twitch_name, 
+            chatter_name, 
+            message, 
+            flagged, 
+            reason, 
+            confidence_fixed, 
+            confidence_raw,
+            ai_scores } = messageObj
+
+        const collection = db.collection('chat_logs')
+
+        let date= new Date()
+
+        let timestamp = date.getFullYear() + '-' +
+            ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+            ('0' + date.getDate()).slice(-2) + '-' +
+            ('0' + date.getHours()).slice(-2) + ':' +
+            ('0' + date.getMinutes()).slice(-2) + ':' +
+            ('0' + date.getSeconds()).slice(-2);
+
+        const newLog = {
+            twitch_name: twitch_name,
+            chatter_name: chatter_name,
+            message: message,
+            timestamp: timestamp,
+            flagged: flagged ? true : false,
+            reason: reason ? reason : false,
+            confidence_fixed: confidence_fixed ? confidence_fixed : false,
+            confidence_raw: confidence_raw ? confidence_raw : false,
+            ai_scores: ai_scores ? ai_scores : false
+        }
+
+        console.log('Logging Message: ', newLog) //! REMOVE
+
+        await collection.insertOne(newLog)
+        return
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error logging chat message to DB ' + error
+        })
+    }
+}
+
+exports.getUserItem = async (channel, item) => {
+    try {
+        const collection = db.collection('app_users')
+
+        let userName;
+
+        if (channel.startsWith('#')) {
+            userName = channel.slice(1);
+        } else {
+            userName = channel;
+        }
+
+        const user = await collection.findOne({ twitch_login: userName })
+
+        if (user) {
+            return user[item]
+        }
+
+        return false
+        
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error getting user ux id from DB ' + error
+        })
+        return false
+    }
+}
+
+exports.addModerationPoints = async (streamerId, offender, newPoints) => {
+    const collection = db.collection('moderation_points')
+
+    const user = await collection.findOne({streamerId: streamerId, offender: offender})
+
+    const date= new Date()
+
+    let timestamp = date.getFullYear() + '-' +
+    ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+    ('0' + date.getDate()).slice(-2) + '-' +
+    ('0' + date.getHours()).slice(-2) + ':' +
+    ('0' + date.getMinutes()).slice(-2) + ':' +
+    ('0' + date.getSeconds()).slice(-2);
+
+    if(user){
+        console.log('User Points Found!: ', user)
+        const updatedPoints = user.points + newPoints
+        const updatedUser = {
+            streamerId: streamerId,
+            offender: offender,
+            points: updatedPoints,
+            lastUpdated: timestamp
+        }
+        const query = {streamerId: streamerId, offender: offender}
+        await collection.updateOne(query, {$set: updatedUser})
+        console.log('Updated User in Database: ', updatedUser) //!REMOVE
+        
+        return
+    }
+
+    const userObj = {
+        streamerId: streamerId,
+        offender: offender,
+        points: newPoints,
+        lastUpdated: timestamp
+    }
+    console.log(`Added ${offender} to database.`)
+    await collection.insertOne(userObj)
+    return
+  }
+
 
 
 
