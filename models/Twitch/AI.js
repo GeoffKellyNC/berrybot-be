@@ -34,3 +34,26 @@ exports.getUserAiConfig = async (unx_id) => {
         })
     }
 }
+
+exports.updatedUserAiConfig = async (unx_id, config) => {
+    try {
+        const collection = db.collection('user_ai_config')
+
+        delete config._id
+
+        const query = { unx_id: unx_id }
+
+        const updatedConfig = await collection.updateOne(query, { $set: config })
+
+        return updatedConfig
+
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: "Server",
+            script: '/models/AI.js (updatedUserAiConfig)',
+            info: 'There was a user getting data from Twitch API ' + error
+        })
+        return false
+    }
+}

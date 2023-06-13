@@ -1,5 +1,6 @@
 const express = require('express');
 const TwitchModel = require('../../models/Twitch/Twitch')
+const AiModel = require('../../models/AI')
 const consoleLoging = require('../../helpers/consoleLoging');
 const router = express.Router();
 
@@ -158,6 +159,28 @@ router.post('/update-twitch-chat-settings', async (req, res) => {
             info: 'Error updating Twitch Chat Settings ' + error
         })
         res.status(500).json({error: 'Error updating Twitch Chat Settings'})
+    }
+})
+
+router.post('/update-user-ai-settings', async (req, res) => {
+    try {
+        const unx_id = req.headers.unx_id;
+
+        const { aiConfig } = req.body;
+
+        const updatedConfig = await AiModel.updateUserAiConfig(unx_id, aiConfig)
+
+        res.status(200).json(updatedConfig)
+
+
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            name: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (POST /update-user-ai-settings)',
+            info: 'Error updating user AI settings ' + error
+        })
+        res.status(500).json({error: 'Error updating user AI settings'})
     }
 })
 
