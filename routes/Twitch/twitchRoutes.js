@@ -34,33 +34,7 @@ router.get('/get-twitch-chat-settings', async (req, res) => {
     }
 })
 
-router.get('/get-stripe-id', async (req, res) => {
-    try {
-        const twitch_login = req.params.twitch_login;
 
-        console.log('⛔️ twitch_login: ', twitch_login) //!DEBUG
-
-        const stripeId = await UserModel.getUserItem(twitch_login, 'stripe_id')
-
-        if(!stripeId) {
-            res.status(500).json({ message: 'Error getting Stripe ID'})
-            return
-        }
-
-        res.status(200).json(stripeId)
-
-
-    } catch (error) {
-        consoleLoging({
-            id: null,
-            user: 'Server',
-            script: 'routes/Twitch/twitchRoutes.js (GET /get-stripe-id)',
-            info: 'Error getting Stripe ID ' + error
-        })
-
-        res.status(500).json({error: 'Error getting Stripe ID'})
-    }
-})
 
 
 
@@ -210,6 +184,35 @@ router.post('/update-user-ai-settings', async (req, res) => {
             info: 'Error updating user AI settings ' + error
         })
         res.status(500).json({error: 'Error updating user AI settings'})
+    }
+})
+
+
+router.post('/get-stripe-id', async (req, res) => {
+    try {
+        const twitch_login = req.body.twitch_login;
+
+        console.log('⛔️ twitch_login: ', twitch_login) //!DEBUG
+
+        const stripeId = await UserModel.getUserItem(twitch_login, 'stripe_id')
+
+        if(!stripeId) {
+            res.status(500).json({ message: 'Error getting Stripe ID'})
+            return
+        }
+
+        res.status(200).json(stripeId)
+
+
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (GET /get-stripe-id)',
+            info: 'Error getting Stripe ID ' + error
+        })
+
+        res.status(500).json({error: 'Error getting Stripe ID'})
     }
 })
 
