@@ -80,6 +80,8 @@ exports.setStripeCustomerId = async (customerId, unx_id) => {
 
 exports.updatePaidStatus = async (customerId, action) => {
     try {
+        console.log('⛔️ UPDATING PAID STATUS ⛔️')
+        
         const collection = db.collection('app_users')
 
         switch (action) {
