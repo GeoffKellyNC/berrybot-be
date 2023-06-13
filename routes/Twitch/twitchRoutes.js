@@ -95,7 +95,7 @@ router.post('/start-twitch-poll', async (req, res) => {
     }
 })
 
-router.post('create-twitch-clip', async (req, res) => {
+router.post('/create-twitch-clip', async (req, res) => {
     try {
         const twitch_id = req.headers.twitch_id;
         const accessToken = req.headers.access_token;
