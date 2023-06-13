@@ -287,6 +287,30 @@ exports.getUserIdByName =  async (userName, clientId, accessToken) => {
         
       }
 }
+
+exports.getTwitchChatSettings = async (twitch_id, accessToken) => {
+    try {
+        const modId = 794561481;
+  
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+          "Client-ID": process.env.TWITCH_CLIENT_ID,
+        };
+        const res = await axios.get(
+          `https://api.twitch.tv/helix/chat/settings?broadcaster_id=${twitch_id}&moderator_id=${modId}`,
+          { headers }
+        );
+  
+        return res.data;
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (getTwitchChatSettings)',
+            info: 'There was an ERROR getting data from Twitch API ' + error 
+        })
+    }
+}
   
 
 

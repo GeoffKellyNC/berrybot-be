@@ -7,6 +7,30 @@ const router = express.Router();
 
 //? GET ROUTES
 
+exports.get('/get-twitch-chat-settings', async (req, res) => {
+    try {
+        const twitch_id = req.headers.twitch_id;
+        const accessToken = req.headers.access_token;
+
+        const twitchChatSettings = await TwitchModel.getTwitchChatSettings(twitch_id, accessToken)
+
+        if(twitchChatSettings.data[0].length < 1){
+            res.status(500).json({ message: 'Error getting chat settings'})
+            return
+        }
+
+        res.status(200).json(twitchChatSettings.data[0])
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (GET /get-twitch-chat-settings)',
+            info: 'Error getting Twitch chat settings ' + error
+        })
+        res.status(500).json({error: 'Error getting Twitch chat settings'})
+    }
+})
 
 
 
@@ -114,6 +138,8 @@ router.post('/create-twitch-clip', async (req, res) => {
         res.status(500).json({error: 'Error creating Twitch Clip'})
     }
 })
+
+
 
 module.exports = router;
 
