@@ -3,7 +3,7 @@ const botModel = require('../models/Twitch/Bot')
 const { RefreshingAuthProvider } = require('@twurple/auth')
 const { ChatClient } = require('@twurple/chat');
 const consoleLoging = require('../helpers/consoleLoging')
-const processesMessage = require('../util/processTwitchMessage')
+const processMessage = require('../util/processTwitchMessage');
 
 let berryClient;
 
@@ -29,7 +29,7 @@ const createChatClient = async (authProvider) => {
         }
     })
     chatClient.onMessage( async (channel, user, message) => {
-        processQueue(chatClient, channel, user, { user, message })
+        processMessage(chatClient, channel, user, { user, message })
     })
     berryClient = chatClient
     return chatClient
