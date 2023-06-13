@@ -327,6 +327,8 @@ exports.updateTwitchChatSettings = async (twitch_id, accessToken, setting, value
 
         const res = await axios.patch(`https://api.twitch.tv/helix/chat/settings?broadcaster_id=${twitch_id}&moderator_id=${twitch_id}`, body, { headers })
 
+        console.log('⛔️ STARTING UPDATE CHAT SETTINGS RES ⛔️', res.data) //!DEBUG
+
         return res.data
         
     } catch (error) {
