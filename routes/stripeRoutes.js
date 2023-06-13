@@ -3,7 +3,8 @@ const express = require("express");
 const { mongo } = require("../db/mongo_config");
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_KEY);
-const UserModel = require('../models/Twitch/User')
+const UserModel = require('../models/Twitch/User');
+const consoleLoging = require("../helpers/consoleLoging");
 
 
 
@@ -110,7 +111,7 @@ router.post('/create-checkout-session', async (req, res) => {
     res.redirect(303, session.url);
 })
 
-router.post('/customer-portal' = async (req, res) => {
+router.post('/customer-portal',  async (req, res) => {
   try {
     const  session_id  = req.query.session_id;
     const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
@@ -123,6 +124,12 @@ router.post('/customer-portal' = async (req, res) => {
     res.redirect(303, portalSession.url);
     
   } catch (error) {
+    consoleLoging({
+      id: 'ERROR',
+      user: 'STRIPE',
+      script: 'stripeRoutes.js',
+      info: 'router.post(/customer-portal)',
+    })
     res.status(400).json({ message: error})
     return
   }
