@@ -35,7 +35,7 @@ exports.getUserAiConfig = async (unx_id) => {
     }
 }
 
-exports.updatedUserAiConfig = async (unx_id, config) => {
+exports.updateUserAiConfig = async (unx_id, config) => {
     try {
         const collection = db.collection('user_ai_config')
 
