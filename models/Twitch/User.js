@@ -81,7 +81,7 @@ exports.setStripeCustomerId = async (customerId, unx_id) => {
 exports.updatePaidStatus = async (customerId, action) => {
     try {
         console.log('⛔️ UPDATING PAID STATUS ⛔️')
-        
+
         const collection = db.collection('app_users')
 
         switch (action) {
@@ -229,6 +229,26 @@ exports.addModerationPoints = async (streamerId, offender, newPoints) => {
     console.log(`Added ${offender} to database.`)
     await collection.insertOne(userObj)
     return
+  }
+
+
+  exports.getUserChatLogs = async (channel) => {
+    try {
+        const collection = db.collection('chat_logs')
+
+        const chatLogs = await collection.find({twitch_name: channel}).toArray()
+    
+        return chatLogs
+        
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error getting user chat logs from DB ' + error
+        })   
+        return false
+    }
   }
 
 

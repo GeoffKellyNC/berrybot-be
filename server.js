@@ -46,8 +46,11 @@ server.use('/twitch', require('./routes/Twitch/twitchRoutes'))
 //* YouTube Routes */
 server.use('/youtube/auth', require('./routes/YouTube/authRouteYT'))
 
-
+//* Payment Routes */
 server.use('/payments', require('./routes/stripeRoutes'))
+
+//* AI Routes */
+server.use('/ai', require('./routes/Twitch/aiRoutes'))
 
 
 //* Server */s
