@@ -110,4 +110,22 @@ router.post('/create-checkout-session', async (req, res) => {
     res.redirect(303, session.url);
 })
 
+router.post('/customer-portal' = async (req, res) => {
+  try {
+    const  session_id  = req.query.session_id;
+    const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
+  
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: checkoutSession.customer,
+      return_url: DOMAIN,
+    });
+  
+    res.redirect(303, portalSession.url);
+    
+  } catch (error) {
+    res.status(400).json({ message: error})
+    return
+  }
+})
+
 module.exports = router;
