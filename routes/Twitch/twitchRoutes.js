@@ -1,6 +1,6 @@
 const express = require('express');
 const TwitchModel = require('../../models/Twitch/Twitch')
-const AiModel = require('../../models/AI')
+const AiModel = require('../../models/Twitch/AI')
 const consoleLoging = require('../../helpers/consoleLoging');
 const router = express.Router();
 
