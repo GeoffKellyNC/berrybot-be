@@ -1,9 +1,9 @@
 const runModerationModel = require('../ai/moderationAi')
 const TwitchModel = require('../models/Twitch/Twitch')
 const TrainingModel = require('../models/Twitch/Training')
-const UserModel = require('../models/User')
-const AiModel = require('../models/AI')
-const Queue = require('../models/Queue')
+const UserModel = require('../models/Twitch/User')
+const AiModel = require('../models/Twitch/AI')
+const Queue = require('../models/Twitch/Queue')
 
 const queue = new Queue();
 

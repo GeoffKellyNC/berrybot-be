@@ -1,11 +1,9 @@
-// const { addToQueue, processQueue } = require('./messageQ')
 const { processQueue } = require('../ai/processAiMessage')
 const axios = require('axios')
 const runAskBerryModel = require('../ai/askBerryModel')
-const UserModel = require('../models/User')
-const TrainingModel = require('../models/Training')
-const TwitchModel = require('../models/Twitch')
-const processCustomCommand = require('../util/processCustomCommands')
+const UserModel = require('../models/Twitch/User')
+const TrainingModel = require('../models/Twitch/Training')
+const TwitchModel = require('../models/Twtitch/Twitch')
 
  
 const processMessage = async (channel, user, message, chatClient) => {
