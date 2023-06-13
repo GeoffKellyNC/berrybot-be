@@ -29,7 +29,7 @@ const createChatClient = async (authProvider) => {
         }
     })
     chatClient.onMessage( async (channel, user, message) => {
-        processMessage(chatClient, channel, user, { user, message })
+        processMessage(channel, user, message, chatClient)
     })
     berryClient = chatClient
     return chatClient
