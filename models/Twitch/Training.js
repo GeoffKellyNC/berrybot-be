@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { mongo } = require('../../db/mongo_config')
+const { v4: uuid} = require('uuid')
 
 const db = mongo.db(process.env.MONGO_DB_NAME)
 
