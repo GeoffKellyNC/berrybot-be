@@ -38,6 +38,8 @@ router.get('/get-stripe-id', async (req, res) => {
     try {
         const twitch_login = req.body.twitch_login;
 
+        console.log('⛔️ twitch_login: ', twitch_login) //!DEBUG
+
         const stripeId = await UserModel.getUserItem(twitch_login, 'stripe_id')
 
         if(!stripeId) {
@@ -47,7 +49,7 @@ router.get('/get-stripe-id', async (req, res) => {
 
         res.status(200).json(stripeId)
 
-        
+
     } catch (error) {
         consoleLoging({
             id: null,
