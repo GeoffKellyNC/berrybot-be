@@ -118,7 +118,7 @@ router.post('/customer-portal',  async (req, res) => {
   
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: checkoutSession.customer,
-      return_url: DOMAIN,
+      return_url: 'https://berrythebot.app/',
     });
   
     res.redirect(303, portalSession.url);
@@ -128,7 +128,7 @@ router.post('/customer-portal',  async (req, res) => {
       id: 'ERROR',
       user: 'STRIPE',
       script: 'stripeRoutes.js',
-      info: 'router.post(/customer-portal)',
+      info: 'router.post(/customer-portal)' + error,
     })
     res.status(400).json({ message: error})
     return
