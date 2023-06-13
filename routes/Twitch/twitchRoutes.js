@@ -1,5 +1,6 @@
 const express = require('express');
 const TwitchModel = require('../../models/Twitch/Twitch')
+const UserModel = require('../../models/Twitch/User')
 const AiModel = require('../../models/Twitch/AI')
 const consoleLoging = require('../../helpers/consoleLoging');
 const router = express.Router();
@@ -30,6 +31,32 @@ router.get('/get-twitch-chat-settings', async (req, res) => {
             info: 'Error getting Twitch chat settings ' + error
         })
         res.status(500).json({error: 'Error getting Twitch chat settings'})
+    }
+})
+
+router.get('/get-stripe-id', async (req, res) => {
+    try {
+        const twitch_login = req.body.twitch_login;
+
+        const stripeId = await UserModel.getUserItem(twitch_login, 'stripe_id')
+
+        if(!stripeId) {
+            res.status(500).json({ message: 'Error getting Stripe ID'})
+            return
+        }
+
+        res.status(200).json(stripeId)
+
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (GET /get-stripe-id)',
+            info: 'Error getting Stripe ID ' + error
+        })
+
+        res.status(500).json({error: 'Error getting Stripe ID'})
     }
 })
 
