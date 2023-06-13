@@ -19,7 +19,7 @@ const processMessage = async (channel, user, message, chatClient) => {
 
     if(message === "!berry"){
         chatClient.say(channel, ` 
-        Hey there, @{user}! I'm Berry, a Twitch chatbot powered by AI 🤖🍓
+        Hey there, @${user}! I'm Berry, a Twitch chatbot powered by AI 🤖🍓
         I'm still in beta, so feel free to give me feedback and suggestions!
         Here are some of my commands:
         !ping - I'll respond with "Pong!"
