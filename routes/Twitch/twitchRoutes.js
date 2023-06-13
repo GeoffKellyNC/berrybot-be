@@ -145,7 +145,6 @@ router.post('/update-twitch-chat-settings', async (req, res) => {
         const accessToken = req.headers.access_token;
         const { setting, value } = req.body;
 
-        console.log('⛔️ Twitch Chat Settings', setting, value)
 
         const update = await TwitchModel.updateTwitchChatSettings(twitch_id, accessToken, setting, value)
 
