@@ -1,6 +1,8 @@
 const axios = require('axios')
 const consoleLoging = require('../../helpers/consoleLoging')
 const constructTwitchAccessUrl = require('../../helpers/constructAccessUrl')
+const { StaticAuthProvider } = require("@twurple/auth");
+const { ApiClient } = require("@twurple/api");
 
 //* Getting User Twitch Access Token
 exports.getUserTwitchAccessToken = async (code) => {
@@ -265,5 +267,26 @@ exports.getUserIdByName =  async (userName, clientId, accessToken) => {
     }
   }
 
+  exports.createClip = async (accessToken, twitchId) => {
+    try {
+        const clientId = process.env.TWITCH_CLIENT_ID
+        const authProvider = new StaticAuthProvider(clientId, accessToken)
+        const api = new ApiClient({ authProvider })
+        const clip = await api.clips.createClip({ channelId: twitchId });
+  
+        return clip
+  
+      } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (createClip)',
+            info: 'There was an ERROR getting data from Twitch API ' + error
+        })
+        return error
+        
+      }
+}
+  
 
 

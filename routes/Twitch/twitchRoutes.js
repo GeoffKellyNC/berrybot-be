@@ -95,6 +95,26 @@ router.post('/start-twitch-poll', async (req, res) => {
     }
 })
 
+router.post('create-twitch-clip', async (req, res) => {
+    try {
+        const twitch_id = req.headers.twitch_id;
+        const accessToken = req.headers.access_token;
+
+        const clip = TwitchModel.createClip(accessToken, twitch_id)
+
+        res.status(200).json(clip)
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            name: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (POST /create-twitch-clip)',
+            info: 'Error creating Twitch Clip ' + error
+        })
+        res.status(500).json({error: 'Error creating Twitch Clip'})
+    }
+})
+
 module.exports = router;
 
 
