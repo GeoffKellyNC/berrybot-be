@@ -82,6 +82,8 @@ exports.verifyTwitchAccessToken = async (accessToken, twitchId) => {
         }
         const verifiedData = await axios.get('https://id.twitch.tv/oauth2/validate', { headers })
 
+        console.log('🔐 verifiedData: ', verifiedData.data) //!DEBUG
+
 
         if (verifiedData.data.user_id === twitchId){
             return true
