@@ -41,8 +41,10 @@ exports.setUserToDb = async (userData) => {
                await updateUserAccessInfo(userData.access_token, userData.refresh_token, userObject.unx_id)
                 return { user: userObject, isNew: false };
         }
+
+        await collection.insertOne(defaultUserObj);
   
-      return { user: defaultUserObj, isNew: true };
+        return { user: defaultUserObj, isNew: true };
     } catch (error) {
       consoleLoging({
         id: 'ERROR',
