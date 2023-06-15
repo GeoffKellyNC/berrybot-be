@@ -33,6 +33,7 @@ exports.setUserToDb = async (userData) => {
         user_paid: false,
         applicatoin_type: 'Twitch',
         stripe_id: null,
+        account_type: 'user',
         metaData: {},
       };
   
