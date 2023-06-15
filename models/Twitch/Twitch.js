@@ -4,6 +4,8 @@ const constructTwitchAccessUrl = require('../../helpers/constructAccessUrl')
 const { StaticAuthProvider } = require("@twurple/auth");
 const { ApiClient } = require("@twurple/api");
 
+const db = mongo.db(process.env.MONGO_DB_NAME);
+
 //* Getting User Twitch Access Token
 exports.getUserTwitchAccessToken = async (code) => {
     try {
