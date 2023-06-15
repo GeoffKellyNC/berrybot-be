@@ -3,6 +3,8 @@ const consoleLoging = require('../../helpers/consoleLoging')
 const constructTwitchAccessUrl = require('../../helpers/constructAccessUrl')
 const { StaticAuthProvider } = require("@twurple/auth");
 const { ApiClient } = require("@twurple/api");
+const { mongo } = require('../../db/mongo_config')
+
 
 const db = mongo.db(process.env.MONGO_DB_NAME);
 
