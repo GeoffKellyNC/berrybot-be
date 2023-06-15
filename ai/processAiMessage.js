@@ -38,7 +38,7 @@ async function handlePunishment(userConfig, clientConfig, reason){
 async function processQueue(chatClient, channel, user, queueObj){
     const unx_id = UserModel.getUserItem(channel.slice(1), 'unx_id')
     const client_id = process.env.TWITCH_CLIENT_ID
-    const uai_config = await AiModel.getAiConfig(unx_id)   
+    const uai_config = await AiModel.getUserAiConfig(unx_id)   
     const twitch_id = UserModel.getUserItem(channel.slice(1), 'twitch_id') 
 
 
