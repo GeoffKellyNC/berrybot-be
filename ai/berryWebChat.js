@@ -4,7 +4,7 @@ const { chatFromWeb } = require('./prompt');
 const UserModel = require('../models/Twitch/User');
 
 const MAX_TOKENS = 1200; // GPT-3.5-turbo's maximum token limit
-const OPEN_AI_MODEL = 'gpt-3.5-turbo-16'
+const OPEN_AI_MODEL = 'gpt-3.5-turbo-16k'; 
 
 const getTokens = (messageObj) => {
   const keys = Object.keys(messageObj);
