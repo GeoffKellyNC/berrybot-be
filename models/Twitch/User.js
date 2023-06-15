@@ -145,7 +145,6 @@ exports.logChatMessage = async (messageObj) => {
             ai_scores: ai_scores ? ai_scores : false
         }
 
-        console.log('Logging Message: ', newLog) //! REMOVE
 
         await collection.insertOne(newLog)
         return
@@ -215,7 +214,6 @@ exports.addModerationPoints = async (streamerId, offender, newPoints) => {
         }
         const query = {streamerId: streamerId, offender: offender}
         await collection.updateOne(query, {$set: updatedUser})
-        console.log('Updated User in Database: ', updatedUser) //!REMOVE
         
         return
     }
@@ -247,6 +245,52 @@ exports.addModerationPoints = async (streamerId, offender, newPoints) => {
             script: 'models/Twitch/User.js',
             info: 'Error getting user chat logs from DB ' + error
         })   
+        return false
+    }
+  }
+
+exports.setCustomUserCommand = async (commandObj, twitch_id) => {
+    try {
+        const collection =  db.collection('user_custom_commands')
+
+        const newCommand = {
+            cid: uuid(),
+            twitch_id: twitch_id,
+            name: commandObj.name,
+            prompt: commandObj.prompt,
+            action: commandObj.action
+        }
+    
+        await collection.insertOne(newCommand)
+    
+        return newCommand
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error setting user custom command to DB ' + error
+        })
+        return false
+    }
+}
+
+  exports.getUserCustomCommands = async (twitchId) => {
+    try {
+        const collection = db.collection('custom_commands')
+
+        const commands = await collection.find({twitch_id: twitchId}).toArray()
+
+        return commands
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error getting user custom commands from DB ' + error
+        })
+
         return false
     }
   }

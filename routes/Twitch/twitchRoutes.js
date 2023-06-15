@@ -34,7 +34,30 @@ router.get('/get-twitch-chat-settings', async (req, res) => {
     }
 })
 
+router.get('/get-twitch-chat-commands', async (req, res) => {
+    try {
+        const twitch_id = req.headers.twitch_id;
 
+        const twitchChatCommands = await UserModel.getUserCustomCommands(twitch_id)
+
+        if(twitchChatCommands.data[0].length < 1){
+            res.status(500).json({ message: 'Error getting chat commands'})
+            return
+        }
+
+        res.status(200).json(twitchChatCommands)
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (GET /get-twitch-chat-commands)',
+            info: 'Error getting Twitch chat commands ' + error
+        })
+
+        res.status(500).json({error: 'Error getting Twitch chat commands'})
+    }
+})
 
 
 
@@ -213,6 +236,28 @@ router.post('/get-stripe-id', async (req, res) => {
         })
 
         res.status(500).json({error: 'Error getting Stripe ID'})
+    }
+})
+
+router.post('/set-custom-command', async (req, res) => {
+    try {
+        const twitch_id = req.headers.twitch_id;
+        const commandObj = req.body
+
+        const newCommand = await UserModel.setCustomUserCommand(commandObj, twitch_id)
+
+        res.status(200).json(newCommand)
+
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (POST /set-custom-command)',
+            info: 'Error setting custom command ' + error
+        })
+
+        res.status(500).json({error: 'Error setting custom command'})
     }
 })
 

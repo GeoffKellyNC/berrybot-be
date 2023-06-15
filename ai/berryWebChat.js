@@ -4,6 +4,7 @@ const { chatFromWeb } = require('./prompt');
 const UserModel = require('../models/Twitch/User');
 
 const MAX_TOKENS = 800; // GPT-3.5-turbo's maximum token limit
+const OPEN_AI_MODEL = 'gpt-3.5-turbo-16'
 
 const getTokens = (messageObj) => {
   const keys = Object.keys(messageObj);
@@ -106,7 +107,7 @@ const divideChatData = (chatData) => {
   
         console.log(`Sending question for chunk ${index + 1}...`);
         const response = await openai.createChatCompletion({
-          model: 'gpt-3.5-turbo',
+          model: OPEN_AI_MODEL,
           messages: prompt
         });
   
