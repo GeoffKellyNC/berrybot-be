@@ -5,11 +5,9 @@ async function authMiddleware(req, res, next) {
     console.log('🔐 Auth Middleware!!!!!') //!DEBUG
     
     if(req.path.includes('login') || req.path.includes('payments') || req.path.includes('webhook')) {
-        console.log('🔐 Auth Middleware: Login Route') //!DEBUG
         return next()
     }
 
-    console.log('🔐 Auth Middleware: PROTECTED ROUTE.') //!DEBUG
 
 
     
@@ -28,13 +26,10 @@ async function authMiddleware(req, res, next) {
         const isValidated = await authModel.verifyUserJWT(jwtToken, unx_id)
         const accessValid = await authModel.verifyTwitchAccessToken(accessToken, twitch_id )
 
-        console.log('🔐 Auth Middleware: JWT isValidated: ', isValidated) //!DEBUG
-        console.log('🔐 Auth Middleware: Access Token isValidated: ', accessValid) //!DEBUG
 
     
 
-        if (!isValidated || !accessValid) {
-            console.log('🔐 Auth Middleware: JWT or Access Token Invalid') //!DEBUG
+        if (!isValidated) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
