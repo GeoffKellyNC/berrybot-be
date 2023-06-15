@@ -11,12 +11,16 @@ const db = mongo.db(process.env.MONGO_DB_NAME);
 //* Getting User Twitch Access Token
 exports.getUserTwitchAccessToken = async (code) => {
     try {
+
+        console.log('⛔️ GETTING USER TWITCH ACCESS TOKEN ⛔️') //! DEBUG
         const twitchAccessUrl = constructTwitchAccessUrl(code)
         const twitchRes = await axios.post(twitchAccessUrl)
 
 
         const  { access_token, expires_in, refresh_token, scope } = twitchRes.data;
 
+        console.log('⛔️ GOT ACCESS TOKEN ⛔️') //! DEBUG
+        console.log('⛔️ GETTING USER TWITCH DATA ⛔️', access_token) //! DEBUG
         return { 
             accessToken: access_token, 
             expiresIn: expires_in, 

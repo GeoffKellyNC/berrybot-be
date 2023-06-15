@@ -25,12 +25,13 @@ async function authMiddleware(req, res, next) {
     try {
 
         const isValidated = await authModel.verifyUserJWT(jwtToken, unx_id)
+        const accessValid = await authModel.verifyTwitchAccessToken(accessToken, unx_id)
 
         console.log('🔐 Auth Middleware: JWT isValidated: ', isValidated) //!DEBUG
 
     
 
-        if (!isValidated) {
+        if (!isValidated || !accessValid) {
             console.log('🔐 Auth Middleware: JWT or Access Token Invalid') //!DEBUG
             return res.status(401).json({ message: 'Unauthorized' });
         }
