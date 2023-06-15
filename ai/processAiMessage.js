@@ -73,7 +73,7 @@ async function processQueue(chatClient, channel, user, queueObj){
             return
         }
 
-        const accessToken = await UserModel.getUserItems(channel.slice(1), 'access_token')
+        const accessToken = await UserModel.getUserItem(channel.slice(1), 'access_token')
         const bannedUserData = await TwitchModel.getUserIdByName(message_to_process.user, client_id, accessToken)
         const bannedUserId = bannedUserData.id
 
