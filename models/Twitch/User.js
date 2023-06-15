@@ -82,6 +82,10 @@ exports.setStripeCustomerId = async (customerId, unx_id) => {
     try {
         const collection = db.collection('app_users')
 
+        console.log('⛔️ SETTING STRIPE ID ⛔️')//!DEBUG
+        console.log(customerId)//!DEBUG
+        console.log('SET STRIPE ID FOR: ',unx_id)//!DEBUG
+
         await collection.updateOne({ unx_id }, { $set: { stripe_id: customerId } })
 
         return true
@@ -100,7 +104,7 @@ exports.setStripeCustomerId = async (customerId, unx_id) => {
 
 exports.updatePaidStatus = async (customerId, action) => {
     try {
-        console.log('⛔️ UPDATING PAID STATUS ⛔️')
+        console.log('⛔️ UPDATING PAID STATUS ⛔️', customerId) //!DEBUG
 
         const collection = db.collection('app_users')
 
