@@ -42,9 +42,9 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
 
         const unx_id = session.metadata.unx_id;
 
-        console.log('unx_id: ', unx_id) //! REMOVE
+        console.log(' checkout completed unx_id: ', unx_id) //! REMOVE
 
-        if(!unx_id) return res.status(200).json({ message: 'Webhook received successfully' });
+        if(!unx_id) return res.status(200).json({ message: 'NO UNX_ID' });
 
         await UserModel.setStripeCustomerId(customerId, unx_id);
 
@@ -86,7 +86,9 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
 
 
 router.post('/create-checkout-session', async (req, res) => {
+    console.log('⛔️ Creating checkout session') //! REMOVE
     const unx_id  = req.query.unx_id
+    console.log('Create checkout session unx_id: ', unx_id) //! REMOVE
     const prices = await stripe.prices.list({
         lookup_keys: [req.body.lookup_key],
         expand: ['data.product']
