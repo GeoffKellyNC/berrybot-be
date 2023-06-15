@@ -16,6 +16,7 @@ async function authMiddleware(req, res, next) {
     const jwtToken = req.headers.jwt_token;
     const accessToken = req.headers.access_token;
     const unx_id = req.headers.unx_id;
+    const twitch_id = req.headers.twitch_id;
 
 
     if (!jwtToken || !accessToken) {
@@ -25,7 +26,7 @@ async function authMiddleware(req, res, next) {
     try {
 
         const isValidated = await authModel.verifyUserJWT(jwtToken, unx_id)
-        const accessValid = await authModel.verifyTwitchAccessToken(accessToken, unx_id)
+        const accessValid = await authModel.verifyTwitchAccessToken(accessToken, twitch_id )
 
         console.log('🔐 Auth Middleware: JWT isValidated: ', isValidated) //!DEBUG
         console.log('🔐 Auth Middleware: Access Token isValidated: ', accessValid) //!DEBUG
