@@ -58,7 +58,6 @@ exports.verifyUserJWT = async (userJWT, unx_id) => {
                 script: 'models/Auth.js (verifyJWT)',
                 info: `USER NOT VERIFIED!`
             })
-            console.log('🔐 userJWT = storedJWT: ', userJWT === storedJWT) //!DEBUG
             return false
          }
 
@@ -81,14 +80,6 @@ exports.verifyTwitchAccessToken = async (accessToken, twitchId) => {
           'Authorization': `OAuth ${accessToken}`,
         }
         const verifiedData = await axios.get('https://id.twitch.tv/oauth2/validate', { headers })
-
-        console.log('🔐 verifiedData: ', verifiedData.data) //!DEBUG
-
-        console.log('🔐 Twitch ID: ', twitchId ) //!DEBUG
-        console.log('🔐 verifiedData.data.user_id: ', verifiedData.data.user_id) //!DEBUG
-
-        console.log('🔐 verifiedData.data.user_id === twitchId: ', verifiedData.data.user_id === twitchId) //!DEBUG
-
 
 
 

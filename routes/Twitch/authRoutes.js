@@ -85,7 +85,6 @@ router.post('/login', async (req, res) => {
         
             const {user, isNew} = await userModel.setUserToDb(userObject)
 
-            console.log('⛔️ user: ', user) //!DEBUG
             
             const jwtToken = await authModel.createJWT(user.unx_id)
             
