@@ -61,6 +61,8 @@ async function processQueue(chatClient, channel, user, queueObj){
 
         if (!aiRes.flagged && message_to_process.message){
             await UserModel.logChatMessage({
+                unx_id: unx_id,
+                twitch_id: twitch_id,
                 twitch_name: channel.slice(1),
                 chatter_name: message_to_process.user,
                 message: message_to_process.message,
@@ -80,6 +82,8 @@ async function processQueue(chatClient, channel, user, queueObj){
         for(const category in aiRes.categories){
             if(aiRes.categories[category] && uai_config.punishments[category].enabled){
                 await UserModel.logChatMessage({
+                    unx_id: unx_id,
+                    twitch_id: twitch_id,
                     twitch_name: channel.slice(1),
                     chatter_name: message_to_process.user,
                     message: message_to_process.message,

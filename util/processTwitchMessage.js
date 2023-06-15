@@ -12,6 +12,9 @@ const processMessage = async (channel, user, message, chatClient) => {
 
     await TrainingModel.logTrainingChat(channel.slice(1), message)
 
+    const unx_id = UserModel.getUserItem(channel.slice(1), 'unx_id')
+    const twitch_id = UserModel.getUserItem(channel.slice(1), 'twitch_id') 
+
     if(message === "!ping"){
         chatClient.say(channel, `Pong! @${user}`)
         return
@@ -42,6 +45,8 @@ const processMessage = async (channel, user, message, chatClient) => {
         const answer = await runAskBerryModel(question)
         chatClient.say(channel, `@${user} ${answer}`)
         UserModel.logChatMessage({
+            unx_id: 'BOT',
+            twitch_id: 'BOT',
             twitch_name: channel.slice(1),
             chatter_name: 'xberrybot',
             message: `@${user}: ${answer}`
@@ -52,6 +57,8 @@ const processMessage = async (channel, user, message, chatClient) => {
     if(message.toLowerCase().startsWith("@xberrybot")){
         const question = message.slice(10)
         await UserModel.logChatMessage({
+            unx_id,
+            twitch_id,
             twitch_name: channel.slice(1),
             chatter_name: user,
             message: question
@@ -59,6 +66,8 @@ const processMessage = async (channel, user, message, chatClient) => {
         const answer = await runAskBerryModel(question)
         chatClient.say(channel, `@${user} ${answer}`)
         await UserModel.logChatMessage({
+            unx_id: 'BOT',
+            twitch_id: 'BOT',
             twitch_name: channel.slice(1),
             chatter_name: 'xberrybot',
             message: `@${user}: ${answer}`

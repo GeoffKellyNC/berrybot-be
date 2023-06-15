@@ -131,6 +131,8 @@ exports.updatePaidStatus = async (customerId, action) => {
 exports.logChatMessage = async (messageObj) => {
     try {
         const {
+            unx_id,
+            twitch_id,
             twitch_name, 
             chatter_name, 
             message, 
@@ -152,6 +154,8 @@ exports.logChatMessage = async (messageObj) => {
             ('0' + date.getSeconds()).slice(-2);
 
         const newLog = {
+            unx_id: unx_id,
+            twitch_id: twitch_id,
             twitch_name: twitch_name,
             chatter_name: chatter_name,
             message: message,
