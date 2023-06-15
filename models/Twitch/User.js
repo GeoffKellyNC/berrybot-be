@@ -44,7 +44,7 @@ exports.setUserToDb = async (userData) => {
           if (userData[key] !== undefined) {
             updatedUserObj[key] = userData[key];
           } else {
-            updatedUserObj[key] = userObject[key];
+            updatedUserObj[key] = defaultUserObj[key];
           }
         });
   
