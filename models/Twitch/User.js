@@ -7,6 +7,25 @@ const { v4: uuid } = require('uuid');
 
 const db = mongo.db(process.env.MONGO_DB_NAME);
 
+exports.updateUserAccessInfo = async (access_token, refresh_token, unx_id) => {
+    try {
+        const collection = db.collection('app_users')
+
+        collection.updateOne({ unx_id }, { $set: { access_token, refresh_token } })
+
+        return true
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error updating user access info to DB ' + error,
+        })
+        return false
+    }
+  }
+
 //* Setting User to Database. 
 exports.setUserToDb = async (userData) => {
     try {
@@ -56,24 +75,7 @@ exports.setUserToDb = async (userData) => {
   };
 
 
-  exports.updateUserAccessInfo = async (access_token, refresh_token, unx_id) => {
-    try {
-        const collection = db.collection('app_users')
 
-        collection.updateOne({ unx_id }, { $set: { access_token, refresh_token } })
-
-        return true
-        
-    } catch (error) {
-        consoleLoging({
-            id: 'ERROR',
-            user: 'Server',
-            script: 'models/Twitch/User.js',
-            info: 'Error updating user access info to DB ' + error,
-        })
-        return false
-    }
-  }
 
   
   
