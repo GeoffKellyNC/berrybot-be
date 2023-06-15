@@ -37,32 +37,10 @@ exports.setUserToDb = async (userData) => {
         metaData: {},
       };
   
-      let updatedUserObj = { ...defaultUserObj };
-  
-      if (userObject) {
-        // Preserve userObject fields
-        updatedUserObj = { ...userObject, ...updatedUserObj };
-        
-        // Update access_token and refresh_token every time
-        updatedUserObj.access_token = userData.access_token;
-        updatedUserObj.refresh_token = userData.refresh_token;
-
-        // Add new fields from defaultUserObj to userObject
-        Object.keys(defaultUserObj).forEach((key) => {
-          if (!userObject.hasOwnProperty(key)) {
-            updatedUserObj[key] = defaultUserObj[key];
-          }
-        });
-
-        await collection.updateOne(
-          { unx_id: userObject.unx_id },
-          { $set: updatedUserObj }
-        );
-        
-        return { user: updatedUserObj, isNew: false };
-      }
-  
-      await collection.insertOne(defaultUserObj);
+        if (userObject) {
+               await updateUserAccessInfo(userData.access_token, userData.refresh_token, userObject.unx_id)
+                return { user: userObject, isNew: false };
+        }
   
       return { user: defaultUserObj, isNew: true };
     } catch (error) {
@@ -74,6 +52,26 @@ exports.setUserToDb = async (userData) => {
       });
     }
   };
+
+
+  exports.updateUserAccessInfo = async (access_token, refresh_token, unx_id) => {
+    try {
+        const collection = db.collection('app_users')
+
+        collection.updateOne({ unx_id }, { $set: { access_token, refresh_token } })
+
+        return true
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error updating user access info to DB ' + error,
+        })
+        return false
+    }
+  }
 
   
   
