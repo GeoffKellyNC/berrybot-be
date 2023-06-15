@@ -36,16 +36,22 @@ exports.setUserToDb = async (userData) => {
         metaData: {},
       };
   
+      let updatedUserObj = { ...defaultUserObj };
+  
       if (userObject) {
-        const updatedUserObj = {
-          ...defaultUserObj,
-          access_token: userObject.access_token,
-          refresh_token: userObject.refresh_token,
-        };
+        Object.keys(defaultUserObj).forEach((key) => {
+          if (userData[key] !== undefined) {
+            updatedUserObj[key] = userData[key];
+          } else {
+            updatedUserObj[key] = userObject[key];
+          }
+        });
+  
         await collection.updateOne(
           { unx_id: userObject.unx_id },
           { $set: updatedUserObj }
         );
+        
         return { user: updatedUserObj, isNew: false };
       }
   
@@ -61,6 +67,7 @@ exports.setUserToDb = async (userData) => {
       });
     }
   };
+  
   
 
 exports.setStripeCustomerId = async (customerId, unx_id) => {
