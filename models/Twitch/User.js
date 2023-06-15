@@ -57,7 +57,7 @@ exports.setUserToDb = async (userData) => {
       };
   
         if (userObject) {
-               await updateUserAccessInfo(userData.access_token, userData.refresh_token, userObject.unx_id)
+               await exports.updateUserAccessInfo(userData.access_token, userData.refresh_token, userObject.unx_id)
                 return { user: userObject, isNew: false };
         }
 
