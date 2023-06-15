@@ -28,6 +28,7 @@ async function authMiddleware(req, res, next) {
         const accessValid = await authModel.verifyTwitchAccessToken(accessToken, unx_id)
 
         console.log('🔐 Auth Middleware: JWT isValidated: ', isValidated) //!DEBUG
+        console.log('🔐 Auth Middleware: Access Token isValidated: ', accessValid) //!DEBUG
 
     
 
