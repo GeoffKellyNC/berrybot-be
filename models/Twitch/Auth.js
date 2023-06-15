@@ -84,6 +84,13 @@ exports.verifyTwitchAccessToken = async (accessToken, twitchId) => {
 
         console.log('🔐 verifiedData: ', verifiedData.data) //!DEBUG
 
+        console.log('🔐 Twitch ID: ', twitchId ) //!DEBUG
+        console.log('🔐 verifiedData.data.user_id: ', verifiedData.data.user_id) //!DEBUG
+
+        console.log('🔐 verifiedData.data.user_id === twitchId: ', verifiedData.data.user_id === twitchId) //!DEBUG
+
+
+
 
         if (verifiedData.data.user_id === twitchId){
             return true
