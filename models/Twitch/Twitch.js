@@ -256,14 +256,16 @@ exports.getUserIdByName =  async (userName, clientId, accessToken) => {
       }
       const res = await axios.get(`https://api.twitch.tv/helix/users?login=${userName}`, { headers })
 
-      
+      console.log('⛔️ GET USER ID RES ⛔️', res.data.data) //!DEBUG
+
       return res.data.data[0]
 
     } catch (error) {
+        console.log('⛔️ GET USER ID ERROR: ', error.response.data) //!DEBUG
       consoleLoging({
         id: null,
         user: 'Server',
-        script: '/models/Twitch.sj (getUserIdByName)',
+        script: '/models/Twitch.js (getUserIdByName)',
         info: 'There was an ERROR getting data from Twitch API ' + error.response.data
       })
         return error.response.data
