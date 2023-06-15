@@ -58,7 +58,8 @@ exports.setUserToDb = async (userData) => {
   
         if (userObject) {
                await exports.updateUserAccessInfo(userData.access_token, userData.refresh_token, userObject.unx_id)
-                return { user: userObject, isNew: false };
+                const updatedUser = await collection.findOne({ email: userData.email });
+                return { user: updatedUser, isNew: false };
         }
 
         await collection.insertOne(defaultUserObj);
