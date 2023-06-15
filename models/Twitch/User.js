@@ -40,14 +40,20 @@ exports.setUserToDb = async (userData) => {
       let updatedUserObj = { ...defaultUserObj };
   
       if (userObject) {
+        // Preserve userObject fields
+        updatedUserObj = { ...userObject, ...updatedUserObj };
+        
+        // Update access_token and refresh_token every time
+        updatedUserObj.access_token = userData.access_token;
+        updatedUserObj.refresh_token = userData.refresh_token;
+
+        // Add new fields from defaultUserObj to userObject
         Object.keys(defaultUserObj).forEach((key) => {
-          if (userData[key] !== undefined) {
-            updatedUserObj[key] = userData[key];
-          } else {
+          if (!userObject.hasOwnProperty(key)) {
             updatedUserObj[key] = defaultUserObj[key];
           }
         });
-  
+
         await collection.updateOne(
           { unx_id: userObject.unx_id },
           { $set: updatedUserObj }
@@ -68,6 +74,7 @@ exports.setUserToDb = async (userData) => {
       });
     }
   };
+
   
   
 
