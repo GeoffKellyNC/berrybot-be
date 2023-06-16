@@ -247,8 +247,9 @@ exports.timeoutUserApi = async (clientId, accessToken, twitch_id, userId, reason
             id: null,
             user: 'Server',
             script: '/models/Twitch.sj (timeoutUserApi)',
-            info: 'There was an ERROR getting data from Twitch API ' + error.response.data
+            info: error.response.data
        })
+       console.log('⛔️ TIMEOUT USER ERROR: ', error.response.data) //!REMOVE
        return false
    }
 }
