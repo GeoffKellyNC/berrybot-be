@@ -2,7 +2,7 @@ const authModel = require('../models/Twitch/Auth')
 
 async function authMiddleware(req, res, next) {
 
-    console.log('🔐 Auth Middleware!!!!!') //!DEBUG
+    console.log('🔐 Auth Middleware!!!!!')
     
     if(req.path.includes('login') || req.path.includes('payments') || req.path.includes('webhook')) {
         return next()

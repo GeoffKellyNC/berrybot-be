@@ -11,7 +11,6 @@ const queue = new Queue();
 async function handlePunishment(userConfig, clientConfig, reason){
     switch(userConfig.action){
         case 'timeout':
-            console.log('⛔️ TIMEOUT ⛔️', userConfig.duration) //!DEBUG
             await TwitchModel.timeoutUserApi(
                 clientConfig.client_id,
                 clientConfig.accessToken,
@@ -22,7 +21,6 @@ async function handlePunishment(userConfig, clientConfig, reason){
             )
             return
         case 'ban':
-            console.log('⛔️ BAN ⛔️') //!DEBUG
             await TwitchModel.banUserApi(
                 clientConfig.client_id,
                 clientConfig.accessToken,
@@ -39,10 +37,8 @@ async function handlePunishment(userConfig, clientConfig, reason){
 //* QueueObj: { user, message}
 async function processQueue(chatClient, channel, user, queueObj){
     const unx_id = await UserModel.getUserItem(channel, 'unx_id')
-    console.log('⛔️ GOT UNX_ID PUNISHMENT ⛔️', unx_id) //!DEBUG
     const client_id = process.env.TWITCH_CLIENT_ID
     const uai_config = await AiModel.getUserAiConfig(unx_id)   
-    console.log('uai_config Thresholds', uai_config.thresholds) //!DEBUG
     const twitch_id = await UserModel.getUserItem(channel.slice(1), 'twitch_id') 
 
 
@@ -79,8 +75,6 @@ async function processQueue(chatClient, channel, user, queueObj){
             return
         }
 
-        console.log('🚨 Message Flagged 🚨', message_to_process.message) //!DEBUG
-
         const accessToken = await UserModel.getUserItem(channel.slice(1), 'access_token')
         const bannedUserData = await TwitchModel.getUserIdByName(message_to_process.user, client_id, accessToken)
         const bannedUserId = bannedUserData.id
@@ -101,12 +95,9 @@ async function processQueue(chatClient, channel, user, queueObj){
                 })
                 if(aiRes.scores[category] >= uai_config.thresholds[category]){
                     if(message_to_process.user === 'xberrybot' || message_to_process.user === channel.slice(1)){
-                        console.log('🚨 Not Punishing Self 🚨', category) //!DEBUG
                         return
                     }
-                    console.log('🚨 Adding Points 🚨', category) //!DEBUG
                     await UserModel.addModerationPoints(twitch_id, user, pointValues[category])
-                    console.log('🚨 Issuing Punishment 🚨', category) //!DEBUG
                     await handlePunishment(uai_config.punishments[category], {client_id, accessToken, twitch_id, bannedUserId }, `Berry ${uai_config.punishments[category].action} for ${category}. Confidence: ${aiRes.scores[category]}`)
                     return
                 }

@@ -202,7 +202,6 @@ exports.banUserApi = async (clientId, accessToken, twitch_id, banId, reason) => 
                  "Client-Id": `${process.env.TWITCH_CLIENT_ID}`
                  }
              });
-         console.log('BANNED USER SUCCESS: ', banId) //!REMOVE
 
          return true
  
@@ -220,11 +219,6 @@ exports.banUserApi = async (clientId, accessToken, twitch_id, banId, reason) => 
 exports.timeoutUserApi = async (clientId, accessToken, twitch_id, userId, reason, time) => {
     try {
         const moderationId = await AuthModel.verifyTwitchAccessToken(accessToken, twitch_id) 
-
-        console.log('🔐TIMEOUT USER VERIFY ACCESS TOKEN: ', moderationId)
-        console.log('🔐TIMEOUT USER VERIFY TWITCH_ID PASSED: ', twitch_id)
-
-        
 
         console.log('⛔️ TIMEOUT USER API: ', userId, reason, time)
        const timeoutRes =  await axios.post(
@@ -245,9 +239,6 @@ exports.timeoutUserApi = async (clientId, accessToken, twitch_id, userId, reason
                 "Client-Id": `${clientId}`
                 }
             });
-
-        console.log('⛔️ TIMEOUT USER SUCCESS: ', timeoutRes.data) //!REMOVE
-
 
         return true
 
