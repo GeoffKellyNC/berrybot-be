@@ -3,7 +3,7 @@ const userModel = require('../../models/Twitch/User')
 const twitchModel = require('../../models/Twitch/Twitch')
 const authModel = require('../../models/Twitch/Auth')
 const AiModel = require('../../models/Twitch/AI')
-const { connectToBerry, runScheduledCommands } = require('../../models/Twitch/Berry');
+const { connectToBerry, runScheduledCommands, stopAllScheduledCommands, disconnect } = require('../../models/Twitch/Berry');
 const { mongo } = require('../../db/mongo_config');
 const consoleLoging = require('../../helpers/consoleLoging');
 const router = express.Router();
@@ -156,6 +156,28 @@ router.post('/login', async (req, res) => {
         })
     }
 });
+
+router.post('/logout', async (req, res) => {
+    try {
+
+        const channel = req.body.channel;
+
+        await disconnect(channel)
+        await stopAllScheduledCommands(channel)
+
+        res.status(200).json({message: "Logged Out"})
+        
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            name: "Server",
+            script: "routes/authRoutes.js (POST /logout)",
+            info: error
+        })
+
+        res.status(500).json({message: error})
+    }
+})
 
 
 
