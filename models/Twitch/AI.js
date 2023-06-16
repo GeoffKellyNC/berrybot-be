@@ -21,9 +21,8 @@ exports.getUserAiConfig = async (unx_id) => {
             return newConfig
         }
 
-        const config = await collection.findOne({ unx_id })
 
-        return config
+        return exists
 
     } catch (error) {
         consoleLoging({

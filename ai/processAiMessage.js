@@ -38,7 +38,8 @@ async function handlePunishment(userConfig, clientConfig, reason){
 
 //* QueueObj: { user, message}
 async function processQueue(chatClient, channel, user, queueObj){
-    const unx_id = UserModel.getUserItem(channel.slice(1), 'unx_id')
+    const unx_id = UserModel.getUserItem(channel, 'unx_id')
+    console.log('⛔️ GOT UNX_ID PUNISHMENT ⛔️', unx_id) //!DEBUG
     const client_id = process.env.TWITCH_CLIENT_ID
     const uai_config = await AiModel.getUserAiConfig(unx_id)   
     console.log('uai_config Thresholds', uai_config.thresholds) //!DEBUG
@@ -100,6 +101,7 @@ async function processQueue(chatClient, channel, user, queueObj){
                 })
                 if(aiRes.scores[category] >= uai_config.thresholds[category]){
                     if(message_to_process.user === 'xberrybot' || message_to_process.user === channel.slice(1)){
+                        console.log('🚨 Not Punishing Self 🚨', category) //!DEBUG
                         return
                     }
                     console.log('🚨 Adding Points 🚨', category) //!DEBUG
