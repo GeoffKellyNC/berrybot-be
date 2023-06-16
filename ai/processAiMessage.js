@@ -41,6 +41,7 @@ async function processQueue(chatClient, channel, user, queueObj){
     const unx_id = UserModel.getUserItem(channel.slice(1), 'unx_id')
     const client_id = process.env.TWITCH_CLIENT_ID
     const uai_config = await AiModel.getUserAiConfig(unx_id)   
+    console.log('uai_config', uai_config) //!DEBUG
     const twitch_id = UserModel.getUserItem(channel.slice(1), 'twitch_id') 
 
 
@@ -77,6 +78,8 @@ async function processQueue(chatClient, channel, user, queueObj){
             return
         }
 
+        console.log('🚨 Message Flagged 🚨', message_to_process.message) //!DEBUG
+
         const accessToken = await UserModel.getUserItem(channel.slice(1), 'access_token')
         const bannedUserData = await TwitchModel.getUserIdByName(message_to_process.user, client_id, accessToken)
         const bannedUserId = bannedUserData.id
@@ -99,8 +102,9 @@ async function processQueue(chatClient, channel, user, queueObj){
                     if(message_to_process.user === 'xberrybot' || message_to_process.user === channel.slice(1)){
                         return
                     }
-                    console.log('🚨 Message Flagged 🚨', message_to_process.message) //!DEBUG
+                    console.log('🚨 Adding Points 🚨', category) //!DEBUG
                     await UserModel.addModerationPoints(twitch_id, user, pointValues[category])
+                    console.log('🚨 Issuing Punishment 🚨', category) //!DEBUG
                     await handlePunishment(uai_config.punishments[category], {client_id, accessToken, twitch_id, bannedUserId }, `Berry ${uai_config.punishments[category].action} for ${category}. Confidence: ${aiRes.scores[category]}`)
                     return
                 }
