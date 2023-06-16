@@ -263,7 +263,6 @@ exports.getUserIdByName =  async (userName, clientId, accessToken) => {
       }
       const res = await axios.get(`https://api.twitch.tv/helix/users?login=${userName}`, { headers })
 
-      console.log('⛔️ GET USER ID RES ⛔️', res.data.data) //!DEBUG
 
       return res.data.data[0]
 

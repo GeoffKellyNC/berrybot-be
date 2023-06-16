@@ -41,7 +41,7 @@ async function processQueue(chatClient, channel, user, queueObj){
     const unx_id = UserModel.getUserItem(channel.slice(1), 'unx_id')
     const client_id = process.env.TWITCH_CLIENT_ID
     const uai_config = await AiModel.getUserAiConfig(unx_id)   
-    console.log('uai_config', uai_config) //!DEBUG
+    console.log('uai_config Thresholds', uai_config.thresholds) //!DEBUG
     const twitch_id = UserModel.getUserItem(channel.slice(1), 'twitch_id') 
 
 
