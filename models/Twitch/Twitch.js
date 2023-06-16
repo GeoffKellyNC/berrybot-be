@@ -217,7 +217,8 @@ exports.banUserApi = async (clientId, accessToken, twitch_id, banId, reason) => 
 
 exports.timeoutUserApi = async (clientId, accessToken, twitch_id, userId, reason, time) => {
     try {
-        await axios.post(
+        console.log('⛔️ TIMEOUT USER API: ', userId, reason, time)
+       const timeoutRes =  await axios.post(
             `https://api.twitch.tv/helix/moderation/bans?broadcaster_id=${twitch_id}&moderator_id=${twitch_id}`, 
             {
             data: 
@@ -235,6 +236,8 @@ exports.timeoutUserApi = async (clientId, accessToken, twitch_id, userId, reason
                 "Client-Id": `${clientId}`
                 }
             });
+
+        console.log('⛔️ TIMEOUT USER SUCCESS: ', timeoutRes.data) //!REMOVE
 
 
         return true

@@ -11,6 +11,7 @@ const queue = new Queue();
 async function handlePunishment(userConfig, clientConfig, reason){
     switch(userConfig.action){
         case 'timeout':
+            console.log('⛔️ TIMEOUT ⛔️', userConfig.duration) //!DEBUG
             await TwitchModel.timeoutUserApi(
                 clientConfig.client_id,
                 clientConfig.accessToken,
@@ -21,6 +22,7 @@ async function handlePunishment(userConfig, clientConfig, reason){
             )
             return
         case 'ban':
+            console.log('⛔️ BAN ⛔️') //!DEBUG
             await TwitchModel.banUserApi(
                 clientConfig.client_id,
                 clientConfig.accessToken,
@@ -97,6 +99,7 @@ async function processQueue(chatClient, channel, user, queueObj){
                     if(message_to_process.user === 'xberrybot' || message_to_process.user === channel.slice(1)){
                         return
                     }
+                    console.log('🚨 Message Flagged 🚨', message_to_process.message) //!DEBUG
                     await UserModel.addModerationPoints(twitch_id, user, pointValues[category])
                     await handlePunishment(uai_config.punishments[category], {client_id, accessToken, twitch_id, bannedUserId }, `Berry ${uai_config.punishments[category].action} for ${category}. Confidence: ${aiRes.scores[category]}`)
                     return
