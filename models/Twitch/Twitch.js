@@ -1,9 +1,11 @@
 const axios = require('axios')
 const consoleLoging = require('../../helpers/consoleLoging')
 const constructTwitchAccessUrl = require('../../helpers/constructAccessUrl')
+const AuthModel = require('../../models/Twitch/Auth')
 const { StaticAuthProvider } = require("@twurple/auth");
 const { ApiClient } = require("@twurple/api");
 const { mongo } = require('../../db/mongo_config')
+
 
 
 const db = mongo.db(process.env.MONGO_DB_NAME);
@@ -217,6 +219,13 @@ exports.banUserApi = async (clientId, accessToken, twitch_id, banId, reason) => 
 
 exports.timeoutUserApi = async (clientId, accessToken, twitch_id, userId, reason, time) => {
     try {
+        const moderationId = await AuthModel.verifyTwitchAccessToken(accessToken, twitch_id) 
+
+        console.log('🔐TIMEOUT USER VERIFY ACCESS TOKEN: ', moderationId)
+        console.log('🔐TIMEOUT USER VERIFY TWITCH_ID PASSED: ', twitch_id)
+
+        
+
         console.log('⛔️ TIMEOUT USER API: ', userId, reason, time)
        const timeoutRes =  await axios.post(
             `https://api.twitch.tv/helix/moderation/bans?broadcaster_id=${twitch_id}&moderator_id=${twitch_id}`, 
