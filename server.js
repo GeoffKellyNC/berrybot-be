@@ -38,6 +38,8 @@ server.use(criticalError);
 // server.use(requestLogger);
 
 
+//* General Routes */
+server.use('/music', require('./routes/General/musicRoutes'))
 
 //* Twitch Routes */
 server.use('/auth', require('./routes/Twitch/authRoutes'))
