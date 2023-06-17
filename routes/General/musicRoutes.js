@@ -35,7 +35,7 @@ router.get('/all-music', async (req, res) => {
 router.get('/pending-songs', async (req, res) => {
     try {
 
-        const pendingSongs =  MusicModel.getPendingSongsFromDb()
+        const pendingSongs = await MusicModel.getPendingSongsFromDb()
 
         if(!pendingSongs){
             res.status(500).json('There was an error getting pending songs...')
@@ -77,6 +77,31 @@ router.post('/add-song', async (req, res) => {
             script: 'routes/musicRoutes.js (set-song (POST))',
             info: error
         })
+        res.status(500).json(error)
+    }
+})
+
+router.post('/update-song-status', async (req, res) => {
+    try {
+        const songId = req.body.songId
+
+        const songStatusUpdated = await MusicModel.updateSongStatus(songId)
+
+        if(!songStatusUpdated){
+            res.status(500).json('Error Updating Song Status')
+            return
+        }
+
+        res.status(200).json('Song Status Updated Successfully')
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            name: 'Server',
+            script: 'routes/musicRoutes.js (update-song-status (POST))',
+            info: error
+        })
+
         res.status(500).json(error)
     }
 })

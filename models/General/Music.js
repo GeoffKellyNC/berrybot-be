@@ -86,3 +86,24 @@ exports.getPendingSongsFromDb = async () => {
         return false
     }
 }
+
+export const updateSongStatus = async (song_id) => {
+    try {
+
+        const collectoin = db.collection('music')
+
+        await collectoin.updateOne({ song_id }, { $set: { status: 'approved' } })
+
+        return true
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'Error',
+            user: 'server',
+            script: 'models.Music.js (updateSongStatus)',
+            info: error
+        })
+
+        return false
+    }
+}
