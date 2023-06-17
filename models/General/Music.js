@@ -50,7 +50,7 @@ exports.getAllSongsFromDb = async () => {
 
         const collection = db.collection('music')
 
-        const allSongs = await collection.find({}).toArray()
+        const allSongs = await collection.find({ status: 'approved' }).toArray()
 
         return allSongs
         
