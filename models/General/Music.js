@@ -87,7 +87,7 @@ exports.getPendingSongsFromDb = async () => {
     }
 }
 
-export const updateSongStatus = async (song_id) => {
+exports.updateSongStatus = async (song_id) => {
     try {
 
         const collectoin = db.collection('music')
