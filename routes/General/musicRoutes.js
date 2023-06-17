@@ -83,9 +83,9 @@ router.post('/add-song', async (req, res) => {
 
 router.post('/update-song-status', async (req, res) => {
     try {
-        const songId = req.body.songId
+        const {songId, status} = req.body
 
-        const songStatusUpdated = await MusicModel.updateSongStatus(songId)
+        const songStatusUpdated = await MusicModel.updateSongStatus(songId, status)
 
         if(!songStatusUpdated){
             res.status(500).json('Error Updating Song Status')

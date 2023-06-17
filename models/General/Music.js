@@ -87,12 +87,12 @@ exports.getPendingSongsFromDb = async () => {
     }
 }
 
-exports.updateSongStatus = async (song_id) => {
+exports.updateSongStatus = async (song_id, status) => {
     try {
 
         const collectoin = db.collection('music')
 
-        await collectoin.updateOne({ song_id }, { $set: { status: 'approved' } })
+        await collectoin.updateOne({ song_id }, { $set: { status } })
 
         return true
         
