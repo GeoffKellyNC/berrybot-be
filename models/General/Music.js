@@ -65,3 +65,24 @@ exports.getAllSongsFromDb = async () => {
         return false
     }
 }
+
+exports.getPendingSongsFromDb = async () => {
+    try {
+
+        const collection = db.collection('music')
+
+        const pendingSongs = await collection.find({status: 'pending'}).toArray()
+
+        return pendingSongs
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: "Server",
+            script: 'models/Music.js (getPendingSongs)',
+            info: error
+        })
+        
+        return false
+    }
+}

@@ -32,6 +32,28 @@ router.get('/all-music', async (req, res) => {
 
 })
 
+router.get('/pending-songs', async (req, res) => {
+    try {
+
+        const pendingSongs =  MusicModel.getPendingSongsFromDb()
+
+        if(!pendingSongs){
+            res.status(500).json('There was an error getting pending songs...')
+            return
+        }
+
+        res.status(200).json(pendingSongs)
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/musicRoutes.js (getPendingSongs (GET))',
+            info: error
+        })
+        res.status(500).json(error)
+    }
+})
 
 //? POST ROUTES
 
