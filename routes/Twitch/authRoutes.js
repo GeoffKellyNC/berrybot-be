@@ -105,6 +105,10 @@ router.post('/login', async (req, res) => {
                     expiresIn: user.expiresIn,
                     scope: user.scope,
                     user_paid: user.user_paid,
+                    application_type: user.application_type,
+                    stripe_customer_id: user.stripe_customer_id,
+                    account_type: user.account_type,
+                    metaData: user.metaData,
                     aiConfig
                 },
                 authData: {
