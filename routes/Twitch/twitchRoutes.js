@@ -295,7 +295,7 @@ router.post('/scheduled-commands', async (req, res) => {
 
         const newCommand = {...commandObj, unx_id}
 
-        await UserModel.setScheduledCommand(newCommand)
+        await TwitchModel.setSchduledCommand(newCommand)
 
         res.status(200).json({message: 'Command scheduled'})
 
@@ -317,9 +317,9 @@ router.post('/scheduled-commands', async (req, res) => {
 
 router.delete('/scheduled-commands', async (req, res) => {
     try {
-        const command_id = req.body
+        const command_id = req.body.data
 
-        const isDeleted = await UserModel.deleteScheduledCommand(command_id)
+        const isDeleted = await TwitchModel.deleteScheduledCommand(command_id)
 
         if(!isDeleted){
             res.status(500).json({message: 'Error deleting command'})
@@ -350,7 +350,7 @@ router.patch('/scheduled-commands', async (req, res) => {
     try {
         const commandObj = req.body
 
-        const isUpdated = await UserModel.updateScheduledCommand(commandObj)
+        const isUpdated = await TwitchModel.updateScheduledCommand(commandObj)
 
         if(!isUpdated){
             res.status(500).json({message: 'Error updating command'})
