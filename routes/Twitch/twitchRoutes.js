@@ -7,7 +7,8 @@ const router = express.Router();
 
 
 
-//? GET ROUTES
+//! ---------------------------GET ROUTES  ------------------------------
+//! ---------------------------------------------------------------------
 
 router.get('/get-twitch-chat-settings', async (req, res) => {
     try {
@@ -59,9 +60,36 @@ router.get('/get-twitch-chat-commands', async (req, res) => {
     }
 })
 
+router.get('/scheduled-commands', async (req, res) => {
+    try {
+        const unx_id = req.headers.unx_id
+
+        const tasks = await TwitchModel.getScheduledCommands(unx_id)
+
+        if(!tasks){
+            res.status(500).json('Error Getting Commands')
+            return
+        }
+
+        res.status(200).json(tasks)
+
+        return
+
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/musicRoutes.js (scheduled-commands (GET))',
+            info: error
+        })
+        res.status(500).json(error)
+    }
+})
 
 
-//? POST ROUTES
+
+//! --------------------------POST ROUTES  ------------------------------
+//! ---------------------------------------------------------------------
 
 router.post('/get-current-stream-data', async (req, res) => {
     try {
@@ -215,8 +243,6 @@ router.post('/get-stripe-id', async (req, res) => {
     try {
         const twitch_login = req.body.twitch_login;
 
-        console.log('⛔️ twitch_login: ', twitch_login) //!DEBUG
-
         const stripeId = await UserModel.getUserItem(twitch_login, 'stripe_id')
 
         if(!stripeId) {
@@ -260,6 +286,95 @@ router.post('/set-custom-command', async (req, res) => {
         res.status(500).json({error: 'Error setting custom command'})
     }
 })
+
+router.post('/scheduled-commands', async (req, res) => {
+    try {
+        const unx_id = req.headers.unx_id;
+
+        const commandObj = req.body
+
+        const newCommand = {...commandObj, unx_id}
+
+        await UserModel.setScheduledCommand(newCommand)
+
+        res.status(200).json({message: 'Command scheduled'})
+
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (POST /scheduled commands)',
+            info: error
+        })
+        res.status(500).json(error)
+        return
+    }
+})
+
+
+//! ----------------------- DELETE ROUTES  ---------------------------------
+//! ---------------------------------------------------------------------
+
+router.delete('/scheduled-commands', async (req, res) => {
+    try {
+        const command_id = req.body
+
+        const isDeleted = await UserModel.deleteScheduledCommand(command_id)
+
+        if(!isDeleted){
+            res.status(500).json({message: 'Error deleting command'})
+            return
+        }
+
+        res.status(200).json({message: 'Command deleted'})
+
+        return
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (DELETE /scheduled commands)',
+            info: error
+        })
+
+        res.status(500).json(error)
+    }
+})
+
+
+//! ---------------------------PATCH ROUTES -----------------------------
+//! ---------------------------------------------------------------------
+
+router.patch('/scheduled-commands', async (req, res) => {
+    try {
+        const commandObj = req.body
+
+        const isUpdated = await UserModel.updateScheduledCommand(commandObj)
+
+        if(!isUpdated){
+            res.status(500).json({message: 'Error updating command'})
+            return
+        }
+
+        res.status(200).json({message: 'Command updated'})
+
+        return
+
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (PATCH /scheduled commands)',
+            info: error
+        })
+
+        res.status(500).json(error)
+    }
+})
+
+
+
 
 
 

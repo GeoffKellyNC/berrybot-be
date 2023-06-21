@@ -5,6 +5,7 @@ const AuthModel = require('../../models/Twitch/Auth')
 const { StaticAuthProvider } = require("@twurple/auth");
 const { ApiClient } = require("@twurple/api");
 const { mongo } = require('../../db/mongo_config')
+const { v4: uuid } = require('uuid');
 
 
 
@@ -348,6 +349,96 @@ exports.updateTwitchChatSettings = async (twitch_id, accessToken, setting, value
             id: null,
             user: 'Server',
             script: '/models/Twitch.sj (updateTwitchSettings)',
+            info: 'There was an ERROR getting data from Twitch API ' + error
+        })
+
+        return false
+    }
+}
+
+exports.getScheduledCommands = async (unx_id) => {
+    try {
+
+        const collection = db.collection('user_scheduled_messages')
+        const query = ({user_id: unx_id})
+        const tasks = await collection.find(query).toArray()
+
+        return tasks
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (getScheduledCommands)',
+            info: 'There was an ERROR getting data from Twitch API ' + error
+        })
+
+        return false
+    }
+}
+
+exports.setSchduledCommand = async (commandObj) => {
+    try{
+        const collection = db.collection('user_scheduled_messages')
+
+        const newCommand = {
+            sid: uuid(),
+            user_id: commandObj.unx_id,
+            schedule_name: commandObj.scheduleName,
+            schedule_message: commandObj.scheduleMessage,
+            timer: commandObj.timer,
+            active: commandObj.active
+        }
+
+        const result = await collection.insertOne(newCommand)
+
+        return result
+
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: '/models/Twitch.sj (setSchduledCommand)',
+            info: 'There was an ERROR getting data from Twitch API ' + error
+        })
+
+        return false
+    }
+}
+
+exports.deleteScheduledCommand = async (sid) => {
+    try {
+        const collection = db.collection('user_scheduled_messages')
+
+        await collection.deleteOne({sid: sid})
+
+        return true
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: '/models/Twitch.sj (deleteScheduledCommand)',
+            info: 'There was an ERROR getting data from Twitch API ' + error
+        })
+
+        return false
+    }
+}
+
+exports.updateScheduledCommand = async (sid, updateObj) => {
+    try {
+
+        const collection = db.collection('user_scheduled_messages')
+
+        const result = await collection.updateOne({sid: sid}, {$set: updateObj})
+
+        return result
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: '/models/Twitch.sj (updateScheduledCommand)',
             info: 'There was an ERROR getting data from Twitch API ' + error
         })
 

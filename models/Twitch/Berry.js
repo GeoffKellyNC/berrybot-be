@@ -35,18 +35,23 @@ async function runScheduledCommands(channel, unx_id) {
     const client = await returnBerryClient();
 
     for (let key in tasks) {
+      if(tasks[key].active){
         const intervalId = setInterval(async () => {
-        await client.say(channel, tasks[key].schedule_message);
-        }, parseInt(tasks[key].timer) * 60 * 1000);
+          await client.say(channel, tasks[key].schedule_message);
+          }, parseInt(tasks[key].timer) * 60 * 1000);
+  
+          if (intervalIds.has(channel)) {
+          intervalIds.get(channel).push(intervalId);
+          } else {
+          intervalIds.set(channel, [intervalId]);
+          }
+        
+        activeCommands.set(channel, tasks);
 
-        if (intervalIds.has(channel)) {
-        intervalIds.get(channel).push(intervalId);
-        } else {
-        intervalIds.set(channel, [intervalId]);
-        }
+      } else {
+        continue
+      }
     }
-
-  activeCommands.set(channel, tasks);
 }
 
 async function stopAllScheduledCommands(channel) {
