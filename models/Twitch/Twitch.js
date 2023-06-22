@@ -384,8 +384,8 @@ exports.setSchduledCommand = async (commandObj) => {
         const newCommand = {
             sid: uuid(),
             user_id: commandObj.unx_id,
-            schedule_name: commandObj.scheduleName,
-            schedule_message: commandObj.scheduleMessage,
+            scheduleName: commandObj.scheduleName,
+            scheduleMessage: commandObj.scheduleMessage,
             timer: commandObj.timer,
             active: commandObj.active
         }

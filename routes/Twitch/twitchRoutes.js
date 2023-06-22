@@ -319,6 +319,8 @@ router.delete('/scheduled-commands', async (req, res) => {
     try {
         const command_id = req.body.data
 
+        console.log('COMMAND ID',command_id)
+
         const isDeleted = await TwitchModel.deleteScheduledCommand(command_id)
 
         if(!isDeleted){
