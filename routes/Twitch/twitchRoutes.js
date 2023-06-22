@@ -317,7 +317,7 @@ router.post('/scheduled-commands', async (req, res) => {
 
 router.delete('/scheduled-commands', async (req, res) => {
     try {
-        const command_id = req.body.data
+        const command_id = req.params.command_id
 
         console.log('COMMAND ID',command_id)
 
