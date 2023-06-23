@@ -125,7 +125,6 @@ router.post('/customer-portal/:session_id',  async (req, res) => {
 
     const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
 
-    console.log('⛔️ checkoutSession: ', checkoutSession) //! REMOVE
   
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: checkoutSession.customer,
@@ -134,7 +133,7 @@ router.post('/customer-portal/:session_id',  async (req, res) => {
 
     console.log('⛔️ portalSession: ', portalSession.url) //! REMOVE
   
-    res.redirect(303, portalSession.url);
+    res.status(200).json(portalSession.url)
     
   } catch (error) {
     consoleLoging({
