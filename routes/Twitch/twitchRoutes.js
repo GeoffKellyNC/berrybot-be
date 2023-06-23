@@ -115,7 +115,7 @@ router.post('/stripe-session', async (req, res) => {
     try {
         const unx_id = req.headers.unx_id
 
-        const session_id = req.body
+        const session_id = req.body.session_id
 
         console.log('⛔️ SETTING SESSION ID: ',session_id) //! DEBUG
 
