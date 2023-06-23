@@ -167,6 +167,8 @@ exports.processCustomCommand = async (channel,  message, chatClient, twitch_id) 
 
     console.log('⛔️ Processing Custom Command', message) //!DEBUG
 
+    console.log('⛔️ Twitch ID: ', twitch_id) //!DEBUG
+
    const commands = await UserModel.getUserCustomCommands(twitch_id)
 
     console.log('⛔️ CUSTOM COMMANDS ⛔️', commands) //!DEBUG
