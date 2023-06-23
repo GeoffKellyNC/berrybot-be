@@ -35,7 +35,7 @@ router.get('/get-twitch-chat-settings', async (req, res) => {
     }
 })
 
-router.get('/get-twitch-chat-commands', async (req, res) => {
+router.get('/twitch-chat-commands', async (req, res) => {
     try {
         const twitch_id = req.headers.twitch_id;
 
@@ -265,7 +265,7 @@ router.post('/get-stripe-id', async (req, res) => {
     }
 })
 
-router.post('/set-custom-command', async (req, res) => {
+router.post('/twitch-chat-commands', async (req, res) => {
     try {
         const twitch_id = req.headers.twitch_id;
         const commandObj = req.body
@@ -344,6 +344,33 @@ router.delete('/scheduled-commands/:command_id', async (req, res) => {
     }
 })
 
+router.delete('/twitch-chat-commands/:command_id', async (req, res) => {
+    try {
+        const command_id = req.params.command_id
+
+        const isDeleted = await UserModel.deleteCustomCommand(command_id)
+
+        if(!isDeleted){
+            res.status(500).json({message: 'Error deleting command'})
+            return
+        }
+
+        res.status(200).json({message: 'Command deleted'})
+
+        return
+
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (DELETE /twitch-chat-commands)',
+            info: error
+        })
+    
+        res.status(500).json(error)
+    }
+})
+
 
 //! ---------------------------PATCH ROUTES -----------------------------
 //! ---------------------------------------------------------------------
@@ -374,6 +401,34 @@ router.patch('/scheduled-commands', async (req, res) => {
         res.status(500).json(error)
     }
 })
+
+router.patch('/twitch-chat-commands', async (req, res) => {
+    try {
+        const commandObj = req.body
+
+        const isUpdated = await UserModel.updateCustomCommand(commandObj)
+
+        if(!isUpdated){
+            res.status(500).json({message: 'Error updating command'})
+            return
+        }
+
+        res.status(200).json({message: 'Command updated'})
+
+        return
+
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (PATCH /twitch-chat-commands)',
+            info: error
+        })
+
+        res.status(500).json(error)
+    }
+})
+
 
 
 

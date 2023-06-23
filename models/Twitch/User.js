@@ -309,7 +309,7 @@ exports.setCustomUserCommand = async (commandObj, twitch_id) => {
 
   exports.getUserCustomCommands = async (twitchId) => {
     try {
-        const collection = db.collection('custom_commands')
+        const collection = db.collection('user_custom_commands')
 
         const commands = await collection.find({twitch_id: twitchId}).toArray()
 
@@ -326,6 +326,49 @@ exports.setCustomUserCommand = async (commandObj, twitch_id) => {
     }
   }
 
+
+    exports.deleteCustomCommand = async (cid) => {
+        try{
+            const collection = db.collection('user_custom_commands')
+
+            const query = {cid: cid}
+
+            await collection.deleteOne(query)
+
+            return true
+
+        } catch (error) {
+            consoleLoging({
+                id: "ERROR",
+                user: 'Server',
+                script: 'models/Twitch/User.js',
+                info: 'Error deleting user custom command from DB ' + error
+            })
+            return false
+        }
+    }
+
+    exports.updateCustomCommand = async (commandObj) => {
+        try{
+            const collection = db.collection('user_custom_commands')
+
+            const query = {cid: commandObj.cid}
+
+            await collection.updateOne(query, {$set: commandObj})
+
+            return true
+
+
+        } catch (error) {
+            consoleLoging({
+                id: "ERROR",
+                user: 'Server',
+                script: 'models/Twitch/User.js',
+                info: 'Error updating user custom command from DB ' + error
+            })
+            return false
+        }
+    }
 
 
 
