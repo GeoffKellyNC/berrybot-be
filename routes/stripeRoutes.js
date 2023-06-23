@@ -114,9 +114,15 @@ router.post('/create-checkout-session', async (req, res) => {
     res.redirect(303, session.url);
 })
 
-router.post('/customer-portal',  async (req, res) => {
+router.post('/customer-portal/:session_id',  async (req, res) => {
   try {
-    const  session_id  = req.query.session_id;
+    console.log('⛔️ Creating customer portal session') //! REMOVE
+    const  session_id  = req.params.session_id;
+    console.log('Create customer portal session session_id: ', session_id) //! REMOVE
+
+    if(!session_id) return res.status(400).json({ message: 'NO SESSION ID' })
+
+    
     const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
   
     const portalSession = await stripe.billingPortal.sessions.create({
