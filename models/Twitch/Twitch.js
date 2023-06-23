@@ -162,13 +162,13 @@ exports.startTwitchPoll = async (accessToken, twitchId, pollOptions, pollTitle, 
 }
 
 
-exports.processCustomCommand = async (channel,  message, chatClient) => {
+exports.processCustomCommand = async (channel,  message, chatClient, twitch_id) => {
 
     console.log('⛔️ Processing Custom Command', message) //!DEBUG
 
     const collection = db.collection('user_custom_commands')
       
-    const query = { twitch_name: channel.slice(1) }
+    const query = { twitch_id: twitch_id }
   
     const commands = await collection.find(query).toArray()
 

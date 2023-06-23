@@ -75,7 +75,7 @@ const processMessage = async (channel, user, message, chatClient) => {
         return 
     }
 
-    await TwitchModel.processCustomCommand(channel, message, chatClient)
+    await TwitchModel.processCustomCommand(channel, message, chatClient, twitch_id)
 
     
     await processQueue(chatClient, channel, user, {user, message})
