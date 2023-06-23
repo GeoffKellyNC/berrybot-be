@@ -12,8 +12,8 @@ const processMessage = async (channel, user, message, chatClient) => {
 
     await TrainingModel.logTrainingChat(channel.slice(1), message)
 
-    const unx_id = UserModel.getUserItem(channel.slice(1), 'unx_id')
-    const twitch_id = UserModel.getUserItem(channel.slice(1), 'twitch_id') 
+    const unx_id = await UserModel.getUserItem(channel.slice(1), 'unx_id')
+    const twitch_id = await UserModel.getUserItem(channel.slice(1), 'twitch_id') 
 
     if(message === "!ping"){
         chatClient.say(channel, `Pong! @${user}`)
