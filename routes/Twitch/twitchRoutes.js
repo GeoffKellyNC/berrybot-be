@@ -113,7 +113,7 @@ router.get('/scheduled-commands', async (req, res) => {
 
 router.post('/stripe-session', async (req, res) => {
     try {
-        const unx_id = req.headers.unx_id
+        const unx_id = req.body.unx_id
 
         const session_id = req.body.session_id
 

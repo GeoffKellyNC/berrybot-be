@@ -125,7 +125,7 @@ exports.setStripeSessionId = async (sessionId, unx_id) => {
     try {
         const collection = db.collection('app_users')
 
-        console.log('SET STRIPE SESSION ID FOR: ',unx_id)//!DEBUG
+        console.log('⛔️ SET STRIPE SESSION ID FOR: ⛔️',unx_id)//!DEBUG
 
         console.log('⛔️ SETTING STRIPE SESSION ID ⛔️', sessionId)//!DEBUG
 
