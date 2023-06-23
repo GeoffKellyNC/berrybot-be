@@ -122,13 +122,17 @@ router.post('/customer-portal/:session_id',  async (req, res) => {
 
     if(!session_id) return res.status(400).json({ message: 'NO SESSION ID' })
 
-    
+
     const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
+
+    console.log('⛔️ checkoutSession: ', checkoutSession) //! REMOVE
   
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: checkoutSession.customer,
       return_url: 'https://berrythebot.app/',
     });
+
+    console.log('⛔️ portalSession: ', portalSession.url) //! REMOVE
   
     res.redirect(303, portalSession.url);
     
