@@ -53,6 +53,7 @@ exports.setUserToDb = async (userData) => {
         applicatoin_type: 'Twitch',
         stripe_id: null,
         account_type: 'user',
+        stripe_session: '',
         metaData: {},
       };
   
@@ -76,11 +77,6 @@ exports.setUserToDb = async (userData) => {
   };
 
 
-
-
-  
-  
-
 exports.setStripeCustomerId = async (customerId, unx_id) => {
     try {
         const collection = db.collection('app_users')
@@ -99,6 +95,49 @@ exports.setStripeCustomerId = async (customerId, unx_id) => {
             user: 'Server',
             script: 'models/Twitch/User.js',
             info: 'Error setting stripe customer id to DB ' + error
+        })
+
+        return false
+    }
+}
+
+exports.getStripeSessionId = async (unx_id) => {
+    try {
+        const collection = db.collection('app_users')
+
+        const user = await collection.findOne({ unx_id })
+
+        return user.stripe_session
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error getting stripe session id from DB ' + error
+        })
+
+        return false
+    }
+}
+
+exports.setStripeSessionId = async (sessionId, unx_id) => {
+    try {
+        const collection = db.collection('app_users')
+
+        console.log('⛔️ SETTING STRIPE SESSION ID ⛔️')//!DEBUG
+
+        await collection.updateOne({ unx_id }, { $set: { stripe_session: sessionId } })
+
+        return true
+
+    } catch (error) {
+
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error setting stripe session id to DB ' + error
         })
 
         return false

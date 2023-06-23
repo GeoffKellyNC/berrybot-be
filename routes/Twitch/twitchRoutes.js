@@ -35,6 +35,31 @@ router.get('/get-twitch-chat-settings', async (req, res) => {
     }
 })
 
+router.get('/stripe-session', async (req, res) => {
+    try{
+
+        const unx_id = req.headers.unx_id
+
+        const stripeSession = await UserModel.getStripeSessionId(unx_id)
+
+        if(!stripeSession){
+            res.status(500).json({message: 'Error getting stripe session'})
+            return
+        }
+
+        res.status(200).json(stripeSession)
+
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (GET /get-twitch-chat-settings)',
+            info: 'Error getting Twitch chat settings ' + error
+        })
+        res.status(500).json({error: 'Error getting Twitch chat settings'})
+    }
+})
+
 router.get('/twitch-chat-commands', async (req, res) => {
     try {
         const twitch_id = req.headers.twitch_id;
@@ -85,6 +110,33 @@ router.get('/scheduled-commands', async (req, res) => {
 
 //! --------------------------POST ROUTES  ------------------------------
 //! ---------------------------------------------------------------------
+
+router.post('/stripe-session', async (req, res) => {
+    try {
+        const unx_id = req.headers.unx_id
+
+        const session_id = req.body
+
+       const setRes =  await UserModel.setStripeSessionId(session_id, unx_id)
+
+         if(!setRes){
+            res.status(500).json({message: 'Error setting stripe session'})
+            return
+        }
+
+        res.status(200).json({message: 'Stripe session set'})
+        
+    } catch (error) {
+        consoleLoging({
+            id: null,
+            user: 'Server',
+            script: 'routes/Twitch/twitchRoutes.js (POST /get-twitch-chat-settings)',
+            info: 'Error getting Twitch chat settings ' + error
+        })
+        res.status(500).json({error: 'Error getting Twitch chat settings'})
+        return
+    }
+})
 
 router.post('/get-current-stream-data', async (req, res) => {
     try {
