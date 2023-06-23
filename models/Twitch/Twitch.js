@@ -164,6 +164,7 @@ exports.startTwitchPoll = async (accessToken, twitchId, pollOptions, pollTitle, 
 
 exports.processCustomCommand = async (channel,  message, chatClient) => {
 
+    console.log('⛔️ Processing Custom Command', message) //!DEBUG
 
     const collection = db.collection('user_custom_commands')
       
@@ -171,9 +172,13 @@ exports.processCustomCommand = async (channel,  message, chatClient) => {
   
     const commands = await collection.find(query).toArray()
 
+    console.log('⛔️ CUSTOM COMMANDS ⛔️', commands) //!DEBUG
+
 
     for (let key in commands){
 
+        console.log('⛔️ CUSTOM COMMAND ⛔️', commands[key].prompt) //!DEBUG
+        console.log('⛔️ USER MESSAGE⛔️', message) //!DEBUG
         if(message === commands[key].prompt){
             await chatClient.say(channel, commands[key].action)
             return
