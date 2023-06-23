@@ -2,6 +2,7 @@ const axios = require('axios')
 const consoleLoging = require('../../helpers/consoleLoging')
 const constructTwitchAccessUrl = require('../../helpers/constructAccessUrl')
 const AuthModel = require('../../models/Twitch/Auth')
+const UserModel = require('../Twitch/User')
 const { StaticAuthProvider } = require("@twurple/auth");
 const { ApiClient } = require("@twurple/api");
 const { mongo } = require('../../db/mongo_config')
@@ -166,11 +167,7 @@ exports.processCustomCommand = async (channel,  message, chatClient, twitch_id) 
 
     console.log('⛔️ Processing Custom Command', message) //!DEBUG
 
-    const collection = db.collection('user_custom_commands')
-      
-    const query = { twitch_id: twitch_id }
-  
-    const commands = await collection.find(query).toArray()
+   const commands = await UserModel.getUserCustomCommands(twitch_id)
 
     console.log('⛔️ CUSTOM COMMANDS ⛔️', commands) //!DEBUG
 
