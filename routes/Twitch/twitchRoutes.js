@@ -117,6 +117,8 @@ router.post('/stripe-session', async (req, res) => {
 
         const session_id = req.body
 
+        console.log('⛔️ SETTING SESSION ID: ',session_id) //! DEBUG
+
        const setRes =  await UserModel.setStripeSessionId(session_id, unx_id)
 
          if(!setRes){
