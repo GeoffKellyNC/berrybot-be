@@ -41,11 +41,6 @@ router.get('/twitch-chat-commands', async (req, res) => {
 
         const twitchChatCommands = await UserModel.getUserCustomCommands(twitch_id)
 
-        if(twitchChatCommands.data[0].length < 1){
-            res.status(500).json({ message: 'Error getting chat commands'})
-            return
-        }
-
         res.status(200).json(twitchChatCommands)
         
     } catch (error) {
