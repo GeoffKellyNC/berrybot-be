@@ -125,9 +125,18 @@ exports.setStripeSessionId = async (sessionId, unx_id) => {
     try {
         const collection = db.collection('app_users')
 
-        console.log('⛔️ SETTING STRIPE SESSION ID ⛔️')//!DEBUG
+        console.log('SET STRIPE SESSION ID FOR: ',unx_id)//!DEBUG
 
-        await collection.updateOne({ unx_id }, { $set: { stripe_session: sessionId } })
+        console.log('⛔️ SETTING STRIPE SESSION ID ⛔️', sessionId)//!DEBUG
+
+        const user = await collection.findOne({ unx_id })
+
+        const newUserData = {
+            ...user,
+            stripe_session: sessionId
+        }
+
+        await collection.updateOne({ unx_id }, { $set: newUserData })
 
         return true
 
