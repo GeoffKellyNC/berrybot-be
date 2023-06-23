@@ -105,6 +105,8 @@ exports.getStripeSessionId = async (unx_id) => {
     try {
         const collection = db.collection('app_users')
 
+        console.log('⛔️ GET STRIPE SESSION ID FOR: ⛔️',unx_id)//!DEBUG
+
         const user = await collection.findOne({ unx_id })
 
         return user.stripe_session
