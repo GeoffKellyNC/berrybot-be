@@ -482,7 +482,7 @@ exports.addBarkCount = async (barkCount) => {
     try{
         const collection = db.collection('barks')
 
-        const barksExist = await collection.findOne({}).toArray()
+        const barksExist = await collection.find({}).toArray()
 
         const dateTime = new Date()
 
