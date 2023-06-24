@@ -106,6 +106,31 @@ router.get('/scheduled-commands', async (req, res) => {
     }
 })
 
+router.get('/feature-request', async (req, res) => {
+    try {
+        const requests = await UserModel.getFeatureRequests()
+
+        if(!requests){
+            res.status(500).json('Error Getting Feature Requests')
+            return
+        }
+
+        res.status(200).json(requests)
+
+        return
+
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/musicRoutes.js (feature-request (GET))',
+            info: error
+        })
+        res.status(500).json(error)
+        return
+    }
+})
+
 
 
 //! --------------------------POST ROUTES  ------------------------------
@@ -229,6 +254,8 @@ router.post('/create-twitch-clip', async (req, res) => {
         const accessToken = req.headers.access_token;
 
         const clip = TwitchModel.createClip(accessToken, twitch_id)
+
+        console.log('⛔️ CLIP: ',clip) //! DEBUG
 
         res.status(200).json(clip)
         
@@ -356,6 +383,29 @@ router.post('/scheduled-commands', async (req, res) => {
             info: error
         })
         res.status(500).json(error)
+        return
+    }
+})
+
+router.post('/feature-requests', async (req, res) => {
+    try {
+        const unx_id = req.headers.unx_id
+
+        const { twitchName, twitchEmail, requestText } = req.body.data
+
+        UserModel.setFeatureRequest({
+            twitchName,
+            twitchEmail,
+            unx_id,
+            requestText
+        })
+
+        res.status(200).json({message: 'Request Sent Successfully'})
+        return
+
+    } catch (error) {
+        res.status(500).json(error)
+        console.log("🚀 ~ file: userControllers.js:95 ~ exports.featureRequest= ~ error:", error)
         return
     }
 })

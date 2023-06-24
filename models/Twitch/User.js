@@ -420,6 +420,65 @@ exports.setCustomUserCommand = async (commandObj, twitch_id) => {
         }
     }
 
+exports.setFeatureRequest = async (requestObj) => {
+    try {
+        const collection = db.collection('user_requests')
+
+        
+        let date= new Date()
+    
+        let timestamp = date.getFullYear() + '-' +
+            ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+            ('0' + date.getDate()).slice(-2) + '-' +
+            ('0' + date.getHours()).slice(-2) + ':' +
+            ('0' + date.getMinutes()).slice(-2) + ':' +
+            ('0' + date.getSeconds()).slice(-2);
+    
+        const newRequest = {
+            reqId: uuid(),
+            twitch_name: requestObj.twitchName,
+            twitch_email: requestObj.twitchEmail,
+            user_id: requestObj.unx_id,
+            request_text: requestObj.requestText,
+            viewed: false,
+            implemented: false,
+            timestamp: timestamp
+        }
+    
+        await collection.insertOne(newRequest)
+    
+        return
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error setting user feature request to DB ' + error
+        })
+        return false
+    }
+  }
+
+exports.getFeatureRequests = async () => {
+    try {
+        const collection = db.collection('user_requests')
+
+        const requests = await collection.find({}).toArray()
+    
+        return requests
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error getting user feature requests from DB ' + error
+        })
+        return false
+    }
+}
+
+
 
 
 

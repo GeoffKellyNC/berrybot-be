@@ -144,7 +144,7 @@ const divideChatData = (chatData) => {
     const prompt = [{role: "system", content: `The following data is a series of responses you gave about twitch steamer ${streamerName}. I need you to summerize these responses for into one response. Here is the data: ${data} `}]
 
     const response = await openaiClient.createChatCompletion({
-        model: 'gpt-4',
+        model: OPEN_AI_MODEL,
         messages: prompt
     })
 
