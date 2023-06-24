@@ -53,3 +53,7 @@ router.post('/pepper', async (req, res) => {
         res.status(500).json({error: 'Error posting pepper'})
     }
 })
+
+
+module.exports = router;
+
