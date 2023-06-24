@@ -31,8 +31,10 @@ router.post('/pepper', async (req, res) => {
 
         const barkCount = req.body.bark_count
 
-        if (code == '503cameronwoodsdrive'){
+        console.log('⛔️ RECEIVED BARK COUNT: ', barkCount) //!DEGUB
 
+        if (code == '503cameronwoodsdrive'){
+            console.log('⛔️ PEPPER AUTHORIZED!') //!DEGUB
             const newData = await UserModel.addBarkCount(barkCount)
 
             res.status(200).json(newData)
