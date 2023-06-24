@@ -255,7 +255,6 @@ router.post('/create-twitch-clip', async (req, res) => {
 
         const clip = await TwitchModel.createClip(accessToken, twitch_id)
 
-        console.log('⛔️ CLIP: ',clip) //! DEBUG
 
         res.status(200).json(clip)
         
