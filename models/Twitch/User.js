@@ -494,13 +494,21 @@ exports.addBarkCount = async (barkCount) => {
             ('0' + dateTime.getSeconds()).slice(-2);
             
         if(barksExist){
-            const query = {id: 1}
-            await collection.updateOne(query, {$set: {count: barkCount, time: timestamp}})
-            return {
-                count: barkCount,
-                time: timestamp
-            }
+            console.log('⛔️ barks exist') //!DEBUG  
+            const barkData = {
+                time: timestamp,
+                count: barkCount
+              }
+      
+              await collection.updateOne({ _id: barksExist[0]._id }, { $set: barkData })
+
+              console.log('⛔️ barks updated', barkData) //!DEBUG
+      
+              return barkData
         }
+      
+
+        console.log(' ⛔️ barks dont exist') //!DEBUG
 
         const newBarkCount = {
             count: barkCount,
@@ -508,6 +516,8 @@ exports.addBarkCount = async (barkCount) => {
         }
 
         await collection.insertOne(newBarkCount)
+
+        console.log('⛔️ barks added', newBarkCount) //!DEBUG
 
         return newBarkCount
 
