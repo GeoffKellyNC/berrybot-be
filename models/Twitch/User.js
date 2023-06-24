@@ -493,7 +493,7 @@ exports.addBarkCount = async (barkCount) => {
             ('0' + dateTime.getMinutes()).slice(-2) + ':' +
             ('0' + dateTime.getSeconds()).slice(-2);
             
-        if(barksExist){
+        if(barksExist.length > 0){
             console.log('⛔️ barks exist') //!DEBUG  
             const barkData = {
                 time: timestamp,
