@@ -528,7 +528,7 @@ exports.getBarkCount = async () => {
     try {
         const collection = db.collection('barks')
 
-        const barkCount = await collection.findOne({}).toArray()
+        const barkCount = await collection.find({}).toArray()
 
         return barkCount
 
