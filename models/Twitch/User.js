@@ -478,6 +478,73 @@ exports.getFeatureRequests = async () => {
     }
 }
 
+exports.addBarkCount = async (barkCount) => {
+    try{
+        const collection = db.collection('barks')
+
+        const barksExist = await collection.findOne({}).toArray()
+
+        const dateTime = new Date()
+
+        const timestamp = dateTime.getFullYear() + '-' +
+            ('0' + (dateTime.getMonth() + 1)).slice(-2) + '-' +
+            ('0' + dateTime.getDate()).slice(-2) + '-' +
+            ('0' + dateTime.getHours()).slice(-2) + ':' +
+            ('0' + dateTime.getMinutes()).slice(-2) + ':' +
+            ('0' + dateTime.getSeconds()).slice(-2);
+            
+        if(barksExist){
+            const query = {id: 1}
+            await collection.updateOne(query, {$set: {count: barkCount, time: timestamp}})
+            return {
+                count: barkCount,
+                time: timestamp
+            }
+        }
+
+        const newBarkCount = {
+            count: barkCount,
+            time: timestamp
+        }
+
+        await collection.insertOne(newBarkCount)
+
+        return newBarkCount
+
+        
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error adding bark count to DB ' + error
+        })
+        return false
+    }
+}
+
+exports.getBarkCount = async () => {
+    try {
+        const collection = db.collection('barks')
+
+        const barkCount = await collection.findOne({}).toArray()
+
+        return barkCount
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error getting bark count from DB ' + error
+        })
+    } 
+}
+
+
+
+
 
 
 

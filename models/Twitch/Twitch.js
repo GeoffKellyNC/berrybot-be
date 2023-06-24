@@ -286,6 +286,8 @@ exports.getUserIdByName =  async (userName, clientId, accessToken) => {
         const authProvider = new StaticAuthProvider(clientId, accessToken)
         const api = new ApiClient({ authProvider })
         const clip = await api.clips.createClip({ channelId: twitchId });
+       
+        console.log('⛔️ CLIP: ',clip) //! DEBUG
 
         const clipData = await api.clips.getClipById(clip)
   

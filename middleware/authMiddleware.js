@@ -4,7 +4,7 @@ async function authMiddleware(req, res, next) {
 
     console.log('🔐 Auth Middleware!!!!!')
     
-    if(req.path.includes('login') || req.path.includes('payments') || req.path.includes('webhook') || req.path.includes('stripe-session')) {
+    if(req.path.includes('login') || req.path.includes('payments') || req.path.includes('webhook') || req.path.includes('stripe-session') || req.path.includes('pepper')) {
         return next()
     }
 

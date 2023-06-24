@@ -40,6 +40,7 @@ server.use(criticalError);
 
 //* General Routes */
 server.use('/music', require('./routes/General/musicRoutes'))
+server.use('/general', require('./routes/General/generalRoutes'))
 
 //* Twitch Routes */
 server.use('/auth', require('./routes/Twitch/authRoutes'))
