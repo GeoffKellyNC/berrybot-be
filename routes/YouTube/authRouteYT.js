@@ -21,9 +21,6 @@ router.get('/login-youtube', async (req, res) => {
     }
 })
 
-router.post('/login-youtube', async (req, res) => {
-
-})
 
 router.post('/login-youtube', async (req, res) => {
     try {

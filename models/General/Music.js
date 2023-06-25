@@ -27,6 +27,11 @@ exports.setSongToDb = async (songObj) => {
             status: 'pending',
             created_at: new Date(),
             user_agree: false,
+            num_plays: 0,
+            num_likes: 0,
+            num_dislikes: 0,
+            num_reports: 0,
+            num_saves: 0,
         }
 
         await collection.insertOne(newSong)
