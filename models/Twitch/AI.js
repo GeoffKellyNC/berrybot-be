@@ -7,55 +7,57 @@ const db = mongo.db(process.env.MONGO_DB_NAME);
 
 exports.getUserAiConfig = async (unx_id) => {
     try {
-        console.log('⛔️ GETTING AI CONFIG')
-        const collection = db.collection('user_ai_config')
-
-        const exists = await collection.findOne({ unx_id })
+        console.log('⛔️ GETTING AI CONFIG');
+        const collection = db.collection('user_ai_config');
+        const exists = await collection.findOne({ unx_id });
 
         if (!exists) {
             const newConfig = {
                 unx_id: unx_id,
                 ...ai_base_config
-            }
-            await collection.insertOne(newConfig)
+            };
+            await collection.insertOne(newConfig);
             
-            return newConfig
+            return newConfig;
         }
 
-        const baseConfigKeys = Object.keys(ai_base_config)
-        const userConfigKeys = Object.keys(exists)
-
-        const missingKeys = baseConfigKeys.filter(key => !userConfigKeys.includes(key))
-
-        if (missingKeys.length > 0) {
-            console.log('⛔️ missingKeys: ', missingKeys) //!DEBUG
-            const newConfig = {
-                ...exists
-            }
-
+        const updateNestedKeys = (baseConfig, userConfig) => {
+            const baseKeys = Object.keys(baseConfig);
+            const userKeys = Object.keys(userConfig);
+            const missingKeys = baseKeys.filter(key => !userKeys.includes(key));
+            
             for(let key of missingKeys) {
-                console.log('⛔️ ADDING key: ', key) //!DEBUG
-                newConfig[key] = ai_base_config[key];
+                console.log('⛔️ ADDING key: ', key); //!DEBUG
+                userConfig[key] = baseConfig[key];
             }
+        };
 
-            await collection.updateOne({ unx_id }, { $set: newConfig })
-            console.log('✅ newConfig: ', newConfig) //!DEBUG
-            return newConfig
+        // Handle top level keys
+        updateNestedKeys(ai_base_config, exists);
+
+        // Handle nested keys under "thresholds"
+        if (exists.thresholds) {
+            updateNestedKeys(ai_base_config.thresholds, exists.thresholds);
         }
 
-        console.log('✅ exists: ', exists) //!DEBUG
+        // Handle nested keys under "punishments"
+        if (exists.punishments) {
+            updateNestedKeys(ai_base_config.punishments, exists.punishments);
+        }
 
-        return exists
-
+        await collection.updateOne({ unx_id }, { $set: exists });
+        console.log('✅ newConfig: ', exists); //!DEBUG
+        return exists;
     } catch (error) {
         consoleLoging({
             id: null,
             user: "Server",
             script: '/models/AI.js (getUserAiConfig)',
             info: 'There was an error getting data from the database: ' + error
-        })
+        });
     }
 }
+
 
 
 exports.updateUserAiConfig = async (unx_id, config) => {
