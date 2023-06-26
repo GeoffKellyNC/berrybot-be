@@ -7,6 +7,7 @@ const db = mongo.db(process.env.MONGO_DB_NAME);
 
 exports.getUserAiConfig = async (unx_id) => {
     try {
+        console.log('⛔️ GETTING AI CONFIG')
         const collection = db.collection('user_ai_config')
 
         const exists = await collection.findOne({ unx_id })
@@ -27,17 +28,22 @@ exports.getUserAiConfig = async (unx_id) => {
         const missingKeys = baseConfigKeys.filter(key => !userConfigKeys.includes(key))
 
         if (missingKeys.length > 0) {
+            console.log('⛔️ missingKeys: ', missingKeys) //!DEBUG
             const newConfig = {
                 ...exists
             }
 
             for(let key of missingKeys) {
+                console.log('⛔️ ADDING key: ', key) //!DEBUG
                 newConfig[key] = ai_base_config[key];
             }
 
             await collection.updateOne({ unx_id }, { $set: newConfig })
+            console.log('✅ newConfig: ', newConfig) //!DEBUG
             return newConfig
         }
+
+        console.log('✅ exists: ', exists) //!DEBUG
 
         return exists
 
