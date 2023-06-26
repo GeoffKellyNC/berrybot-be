@@ -8,7 +8,7 @@ const consoleLoging = require("../helpers/consoleLoging");
 
 
 
-const DOMAIN = process.env.LOCAL_MODE ? 'http://localhost:3000' : 'https://berrythebot.app/'
+const DOMAIN = 'https://berrythebot.app/'
 
 
 
