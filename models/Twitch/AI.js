@@ -21,6 +21,23 @@ exports.getUserAiConfig = async (unx_id) => {
             return newConfig
         }
 
+        const baseConfigKeys = Object.keys(ai_base_config)
+        const userConfigKeys = Object.keys(exists)
+
+        const missingKeys = baseConfigKeys.filter(key => !userConfigKeys.includes(key))
+
+        if (missingKeys.length > 0) {
+            const newConfig = {
+                ...exists
+            }
+
+            for(let key of missingKeys) {
+                newConfig[key] = ai_base_config[key];
+            }
+
+            await collection.updateOne({ unx_id }, { $set: newConfig })
+            return newConfig
+        }
 
         return exists
 
@@ -29,10 +46,11 @@ exports.getUserAiConfig = async (unx_id) => {
             id: null,
             user: "Server",
             script: '/models/AI.js (getUserAiConfig)',
-            info: 'There was a user getting data from Twitch API ' + error
+            info: 'There was an error getting data from the database: ' + error
         })
     }
 }
+
 
 exports.updateUserAiConfig = async (unx_id, config) => {
     try {
