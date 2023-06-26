@@ -310,6 +310,25 @@ exports.addModerationPoints = async (streamerId, offender, newPoints) => {
     return
   }
 
+  exports.getUserChatLogsUnx = async (unx_id) => {
+    try {
+        const collection = db.collection('chat_logs')
+
+        const chatLogs = await collection.find({unx_id: unx_id}).toArray()
+
+        return chatLogs
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            user: 'Server',
+            script: 'models/Twitch/User.js',
+            info: 'Error getting user chat logs from DB ' + error
+        })
+        return false
+    }
+  }
+
 
   exports.getUserChatLogs = async (channel) => {
     try {

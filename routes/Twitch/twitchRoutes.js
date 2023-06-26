@@ -131,6 +131,31 @@ router.get('/feature-request', async (req, res) => {
     }
 })
 
+router.get('/chat-logs', async (req, res) => {
+    try {
+        const unx_id = req.headers.unx_id
+
+        const logs = await UserModel.getUserChatLogsUnx(unx_id)
+
+        if(!logs){
+            res.status(500).json('Error Getting Chat Logs')
+            return
+        }
+
+        res.status(200).json(logs)
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/musicRoutes.js (chat-logs (GET))',
+            info: error
+        })
+
+        res.status(500).json(error)
+    }
+})
+
 
 
 //! --------------------------POST ROUTES  ------------------------------
