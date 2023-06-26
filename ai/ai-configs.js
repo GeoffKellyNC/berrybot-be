@@ -52,22 +52,22 @@ const ai_base_config = {
       harassment: {
         action: 'timeout',
         duration: 3600,
-        enabled: true
+        enabled: false
     },
       'harassment/threatening': {
         action: 'timeout',
         duration: 3600,
-        enabled: true
+        enabled: false
       },
       'self-harm/intent': {
         action: 'ban',
         duration: 0,
-        enabled: true
+        enabled: false
       },
       'self-harm/instruction': {
         action: 'ban',
         duration: 0,
-        enabled: true
+        enabled: false
       }
     }
 }
