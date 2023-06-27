@@ -156,6 +156,30 @@ router.get('/chat-logs', async (req, res) => {
     }
 })
 
+router.get('/twitch-mods', async (req, res) => {
+    try{
+        const twitch_id = req.headers.twitch_id
+        const access_token = req.headers.access_token
+
+        const mods = await TwitchModel.getTwitchMods(twitch_id, access_token)
+
+        if(!mods){
+            res.status(500).json('Error Getting Mods')
+            return
+        }
+
+        res.status(200).json(mods)
+
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/musicRoutes.js (twitch-mods (GET))',
+            info: error
+        })
+    }
+})
+
 
 
 //! --------------------------POST ROUTES  ------------------------------

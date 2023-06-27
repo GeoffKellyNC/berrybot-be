@@ -448,6 +448,31 @@ exports.updateScheduledCommand = async (sid, updateObj) => {
         return false
     }
 }
+
+exports.getTwitchMods = async (twitch_id, accessToken) => {
+    try {
+
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+            "Client-ID": process.env.TWITCH_CLIENT_ID,
+            "Content-Type": "application/json"
+        };
+
+        const res = await axios.get(`https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=${twitch_id}`, { headers })
+
+        return res.data.data
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: '/models/Twitch.sj (getTwitchMods)',
+            info: 'There was an ERROR getting data from Twitch API ' + error
+        })
+
+        return false
+    }
+}
   
 
 
