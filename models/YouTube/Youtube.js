@@ -26,3 +26,22 @@ exports.getGoogleUserData = async (accessToken) => {
         return res.data
       });
 }
+
+exports.getYouTubeData = async (accessToken) => {
+    const youtube = google.youtube({
+        version: 'v3',
+        auth: 'YOUR_AUTH_TOKEN_HERE'
+      });
+      
+      youtube.channels.list({
+        part: 'snippet,contentDetails,statistics',
+        mine: true
+      }, (err, res) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log(res.data);
+        return res.data
+      });
+}
