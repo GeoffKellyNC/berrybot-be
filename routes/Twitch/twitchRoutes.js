@@ -177,6 +177,38 @@ router.get('/twitch-mods', async (req, res) => {
             script: 'routes/musicRoutes.js (twitch-mods (GET))',
             info: error
         })
+
+        res.status(500).json(error)
+    }
+})
+
+router.get('/twitch-chatters', async (req, res) => {
+    try {
+
+        const twitch_id = req.headers.twitch_id
+        const access_token = req.headers.access_token
+
+        const chatters = await TwitchModel.getTwitchChatters(twitch_id, access_token)
+
+        if(!chatters){
+            res.status(500).json('Error Getting Chatters')
+            return
+        }
+
+        res.status(200).json(chatters)
+
+        
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: 'routes/musicRoutes.js (twitch-chatters (GET))',
+            info: error
+        })
+
+        res.status(500).json(error)
+
+
     }
 })
 

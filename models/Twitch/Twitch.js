@@ -473,6 +473,32 @@ exports.getTwitchMods = async (twitch_id, accessToken) => {
         return false
     }
 }
+
+exports.getTwitchChatters = async (twitch_id, accessToken) => {
+    try {
+        const headers = {
+            "Client-ID": process.env.TWITCH_CLIENT_ID,
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+        };
+
+        
+        const res = await axios.get(`https://api.twitch.tv/helix/chat/chatters?broadcaster_id=${twitch_id}&moderator_id=${twitch_id}&first=1000`, { headers })
+
+        return res.data
+
+    } catch (error) {
+        consoleLoging({
+            id: 'ERROR',
+            user: 'Server',
+            script: '/models/Twitch.sj (getTwitchChatters)',
+            info: 'There was an ERROR getting data from Twitch API ' + error
+        })
+
+        return false
+
+    }
+}
   
 
 
