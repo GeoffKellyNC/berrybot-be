@@ -1,13 +1,14 @@
 const express = require('express');
 const consoleLoging = require('../../helpers/consoleLoging');
 const router = express.Router();
-const authModel = require('../../models/YouTube/AuthYT')
+const AuthModel = require('../../models/YouTube/AuthYT')
+const YouTubeModel = require('../../models/YouTube/Youtube')
 
 
 
 router.get('/login-youtube', async (req, res) => {
     try {
-        const loginURL = await authModel.getYouTubeLoginURL()
+        const loginURL = await AuthModel.getYouTubeLoginURL()
 
         res.status(200).json(loginURL)
 
@@ -44,7 +45,7 @@ router.post('/get-login-data', async (req, res) => {
     try {
         const { accessToken } = req.body
 
-        const userData = await authModel.getGoogleUserData(accessToken)
+        const userData = await YouTubeModel.getGoogleUserData(accessToken)
 
         res.status(200).json(userData)
         
