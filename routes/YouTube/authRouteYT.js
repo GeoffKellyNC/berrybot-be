@@ -58,4 +58,4 @@ router.post('/get-login-data', async (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports = router; 
