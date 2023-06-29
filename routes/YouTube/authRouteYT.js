@@ -43,7 +43,9 @@ router.post('/login-youtube', async (req, res) => {
 
 router.post('/get-login-data', async (req, res) => {
     try {
-        const { accessToken } = req.body
+        const  accessToken  = req.body.accessToken
+
+        console.log('YOUTUBE REQ BODY: ', req.body) //!DEBUG
 
         console.log('🔐YOUTUBE ACCESS TOKEN: ', accessToken) //!DEBUG
 
