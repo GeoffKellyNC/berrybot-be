@@ -109,11 +109,8 @@ exports.getYouTubeLoginURL = async () => {
     }
 }
 
-exports.getGoogleAuthToken = async (code) => {
+exports.getGoogleAuthToke = async (code) => {
     try {
-
-        let accessToken = null
-        let refreshToken = null
 
         const oauth2Client = new google.auth.OAuth2(
             process.env.YT_CLIENT_ID,
@@ -121,18 +118,9 @@ exports.getGoogleAuthToken = async (code) => {
             process.env.LOCAL_MODE ? process.env.YT_LOCAL_REDIRECT_URI : null
           );
           
-         oauth2Client.getToken(code, (err, tokens) => {
-            if (err) {
-              console.error('Error getting access token', err);
-              return;
-            }
-             accessToken = tokens.access_token;
-            refreshToken = tokens.refresh_token;
-            console.log(`Access Token: ${accessToken}`);
-            console.log(`Refresh Token: ${refreshToken}`);
-          });
+          const { tokens } = await oauth2Client.getToken(code)
 
-            return { accessToken, refreshToken }
+          return tokens
 
     } catch (error) {
         consoleLoging({
