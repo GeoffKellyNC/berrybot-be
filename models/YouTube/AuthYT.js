@@ -108,3 +108,38 @@ exports.getYouTubeLoginURL = async () => {
         })
     }
 }
+
+exports.getGoogleAuthToken = async (code) => {
+    try {
+
+        let accessToken = null
+        let refreshToken = null
+
+        const oauth2Client = new google.auth.OAuth2(
+            process.env.YT_CLIENT_ID,
+            process.env.YT_CLIENT_SECRET,
+            process.env.LOCAL_MODE ? process.env.YT_LOCAL_REDIRECT_URI : null
+          );
+          
+         oauth2Client.getToken(authorizationCode, (err, tokens) => {
+            if (err) {
+              console.error('Error getting access token', err);
+              return;
+            }
+             accessToken = tokens.access_token;
+            refreshToken = tokens.refresh_token;
+            console.log(`Access Token: ${accessToken}`);
+            console.log(`Refresh Token: ${refreshToken}`);
+          });
+
+            return { accessToken, refreshToken }
+
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            name: 'Server',
+            script: 'models/Auth.js (getGoogleAuthToke())',
+            info: 'Error Getting Google Auth Token ' + error
+        })
+    }
+}

@@ -41,7 +41,6 @@ exports.getYouTubeData = async (accessToken) => {
           console.error(err);
           return;
         }
-        console.log(res.data);
         return res.data
       });
 }
