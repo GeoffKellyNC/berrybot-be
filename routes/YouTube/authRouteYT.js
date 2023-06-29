@@ -40,4 +40,22 @@ router.post('/login-youtube', async (req, res) => {
     }
 })
 
+router.post('/get-login-data', async (req, res) => {
+    try {
+        const { accessToken } = req.body
+
+        const userData = await authModel.getGoogleUserData(accessToken)
+
+        res.status(200).json(userData)
+        
+    } catch (error) {
+        consoleLoging({
+            id: "ERROR",
+            name: "Server",
+            script: "routes/youtube/authRoutes.js (POST /get-login-data)",
+            info: error
+        })
+    }
+})
+
 module.exports = router;
