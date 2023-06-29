@@ -53,9 +53,9 @@ router.post('/get-login-data', async (req, res) => {
 
         // const userData = await YouTubeModel.getYouTubeData(accessToken)
 
-        console.log('🔐 userData: ', userData) //!DEBUG
+        // console.log('🔐 userData: ', userData) //!DEBUG
 
-        res.status(200).json(userData)
+        res.status(200).json('ok')
         
     } catch (error) {
         consoleLoging({

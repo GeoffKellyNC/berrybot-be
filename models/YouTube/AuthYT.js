@@ -109,9 +109,9 @@ exports.getYouTubeLoginURL = async () => {
     }
 }
 
-exports.getGoogleAuthToke = async (code) => {
+exports.getGoogleAuthToken = async (code) => {
     try {
-
+        console.log('⛔️ GETTING TOKENS') //!DEBUG
         const oauth2Client = new google.auth.OAuth2(
             process.env.YT_CLIENT_ID,
             process.env.YT_CLIENT_SECRET,
