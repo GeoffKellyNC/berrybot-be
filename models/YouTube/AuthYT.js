@@ -121,7 +121,7 @@ exports.getGoogleAuthToken = async (code) => {
             process.env.LOCAL_MODE ? process.env.YT_LOCAL_REDIRECT_URI : null
           );
           
-         oauth2Client.getToken(authorizationCode, (err, tokens) => {
+         oauth2Client.getToken(code, (err, tokens) => {
             if (err) {
               console.error('Error getting access token', err);
               return;
