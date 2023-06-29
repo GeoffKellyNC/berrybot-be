@@ -30,7 +30,7 @@ exports.getGoogleUserData = async (accessToken) => {
 exports.getYouTubeData = async (accessToken) => {
     const youtube = google.youtube({
         version: 'v3',
-        auth: 'YOUR_AUTH_TOKEN_HERE'
+        auth: accessToken
       });
       
       youtube.channels.list({
