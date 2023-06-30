@@ -477,8 +477,8 @@ exports.getTwitchMods = async (twitch_id, accessToken) => {
 exports.getTwitchChatters = async (twitch_id, accessToken) => {
     try {
         const headers = {
-            "Client-ID": process.env.TWITCH_CLIENT_ID,
             "Authorization": `Bearer ${accessToken}`,
+            "Client-ID": process.env.TWITCH_CLIENT_ID,
             "Content-Type": "application/json"
         };
 
@@ -494,6 +494,8 @@ exports.getTwitchChatters = async (twitch_id, accessToken) => {
             script: '/models/Twitch.sj (getTwitchChatters)',
             info: 'There was an ERROR getting data from Twitch API ' + error
         })
+
+        console.log('TWITCH CHATTERS ERROR: ', error) //! REMOVE
 
         return false
 
