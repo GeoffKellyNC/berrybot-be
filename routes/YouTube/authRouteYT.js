@@ -51,7 +51,7 @@ router.post('/get-login-data', async (req, res) => {
 
         console.log('🔐 USER DATA: ', userData) //!DEBUG
 
-        console.log('🔐 YOUTUBE DATA: ', youtubeData) //!DEBUG
+        // console.log('🔐 YOUTUBE DATA: ', youtubeData) //!DEBUG
 
         const payload = {
             authData: tokens,

@@ -88,8 +88,11 @@ exports.getYouTubeLoginURL = async () => {
             'https://www.googleapis.com/auth/youtube',
             'https://www.googleapis.com/auth/youtube.force-ssl',
             'https://www.googleapis.com/auth/youtube.readonly',
-            'https://www.googleapis.com/auth/plus.me'
-          ];
+            'https://www.googleapis.com/auth/plus.me',
+            'https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/plus.login',
+            'https://www.googleapis.com/auth/youtube.upload',          ];
           
           const url = oauth2Client.generateAuthUrl({
             // 'online' (default) or 'offline' (gets refresh_token)
