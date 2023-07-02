@@ -86,6 +86,10 @@ exports.getLiveChatId = async (accessToken) => {
 
 
     console.log('⛔️ SAMPLE SNIPPET DATA: ', res.data.items[0].snippet )
+    console.log('⛔️ SAMPLE Status DATA: ', res.data.items[0].status )
+    console.log('⛔️ SAMPLE contentDetails DATA: ', res.data.items[0].contentDetails )
+
+
 
     // return res.data.items[0].snippet.liveChatId ? res.data.items[0].snippet.liveChatId : false
 
