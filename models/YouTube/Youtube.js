@@ -97,7 +97,7 @@ exports.getLiveChatId = async (accessToken) => {
 
 
 
-    // return livestream ? livestream : false
+    return liveStream ? liveStream : false
 
     
   } catch (error) {
