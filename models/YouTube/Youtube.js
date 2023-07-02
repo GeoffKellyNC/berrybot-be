@@ -81,8 +81,8 @@ exports.getLiveChatId = async (accessToken) => {
       broadcastType: 'all'
 
     })
-
-    console.log('⛔️LIVE CHAT ID: ', res) //!DEBUG
+    const formattedRes = JSON.parse(res)
+    console.log('⛔️LIVE CHAT ID: ', formattedRes.data) //!DEBUG
 
     // return res.data.items[0].snippet.liveChatId ? res.data.items[0].snippet.liveChatId : false
 
