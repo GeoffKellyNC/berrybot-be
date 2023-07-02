@@ -11,7 +11,7 @@ const startMessagePolling = async (accessToken, chatId) => {
 
             console.log('⛔️ Message Data: ', messageData)
 
-            messageData.items.forEacht(item => {
+            messageData.items.forEach(item => {
                 console.log('Message Data Snippet: ', item.snippet) //! REMOVE
                 console.log('Message Data Author: ', item.authorDetails) //!REMOVE
             })
