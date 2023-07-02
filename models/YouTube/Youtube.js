@@ -82,13 +82,13 @@ exports.getLiveChatId = async (accessToken) => {
 
     })
 
-    console.log('⛔️LIVE CHAT ID: ', res.data.items) //!DEBUG
+    // console.log('⛔️LIVE CHAT ID: ', res.data.items) //!DEBUG
 
     const liveStream = res.data.items.find((stream, idx) => {
       if (stream.status.lifeCycleStatus === 'live'){
         return stream
       }
-      return 'No Live Streams Found!'
+      return false
     })
     
 
@@ -97,7 +97,7 @@ exports.getLiveChatId = async (accessToken) => {
 
 
 
-    // return res.data.items[0].snippet.liveChatId ? res.data.items[0].snippet.liveChatId : false
+    // return livestream ? livestream : false
 
     
   } catch (error) {
