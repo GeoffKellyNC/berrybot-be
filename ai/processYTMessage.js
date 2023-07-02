@@ -8,7 +8,9 @@ const startMessagePolling = async (accessToken, chatId) => {
         while(true){
             const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
 
-            // console.log('Message Data: ', messageData) //! REMOVE
+            console.log('⛔️ Message Data: ', messageData)
+            console.log('Message Data Snippet: ', messageData.snippet) //! REMOVE
+            console.log('Message Data Author: ', messageData.authorDetails) //!REMOVE
 
             // if(messageData){
             //     processYTMessage(messageData)
