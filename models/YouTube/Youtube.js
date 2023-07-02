@@ -76,12 +76,12 @@ exports.getLiveChatId = async (accessToken) => {
     const youtube = google.youtube({version: 'v3', auth: oauth2Client})
 
     const res = await youtube.liveBroadcasts.list({
-      part: 'snippet',
+      part: 'snippet, status, contentDetails',
       mine: true,
       broadcastType: 'all'
 
     })
-    
+
     console.log('⛔️LIVE CHAT ID: ', res.data) //!DEBUG
 
     // return res.data.items[0].snippet.liveChatId ? res.data.items[0].snippet.liveChatId : false
