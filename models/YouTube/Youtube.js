@@ -76,7 +76,7 @@ exports.getLiveChatId = (accessToken) => {
     const youtube = google.youtube({version: 'v3', auth: oauth2Client})
 
     const res = youtube.liveBroadcasts.list({
-      part: 'snippet,contentDetails,status',
+      part: 'snippet',
       mine: true,
       broadcastStatus: 'active'
     })
