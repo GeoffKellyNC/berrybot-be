@@ -6,20 +6,31 @@ const consoleLoging = require('../helpers/consoleLoging')
 const startMessagePolling = async (accessToken, chatId) => {
     try {
         console.log('⛔️ Starting Messgae Polling!') //!REMOVE
+        const messageArray = []
         while(true){
             const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
-
-            console.log('⛔️ Message Data: ', messageData)
-
             messageData.items.forEach(item => {
-                console.log('Message Data Snippet: ', item.snippet) //! REMOVE
-                console.log('Message Data Author: ', item.authorDetails) //!REMOVE
-            })
+                const exists = messageArray.some(chat => item.snippet.id === chat.messageId)
 
-            // if(messageData){
-            //     processYTMessage(messageData)
-            //     return
-            // }   
+                if (exists){
+                    return
+                }
+                messageArray.push({
+                    messageId: item.snippet.id,
+                    user: item.authorDetails.displayName,
+                    message: item.snippet.textMessageDetails.messageText,
+                    isOwner: item.authorDetails.isChatOwner,
+                    isMod: item.authorDetails.isChatOwner,
+                    timestamp: item.snippet.publishedAt,
+                    sender_img: item.authorDetails.profileImageUrl,
+                    chatSponsor: item.authorDetails.isChatSponsor
+                })
+            }) 
+
+            if(messageData){
+                processYTMessage(messageArray)
+                return
+            }   
 
         await new Promise(resolve => setTimeout(resolve, messageData.pollingIntervalMillis));
     }
@@ -38,7 +49,7 @@ const startMessagePolling = async (accessToken, chatId) => {
 
 const processYTMessage = async (message) => {
     try {
-        
+        console.log('⛔️ Messages to Process: ', message)
 
     } catch (error) {
         consoleLoging({

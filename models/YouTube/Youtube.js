@@ -81,9 +81,7 @@ exports.getLiveChatId = async (accessToken) => {
       broadcastType: 'all'
 
     })
-
-    // console.log('⛔️LIVE CHAT ID: ', res.data.items) //!DEBUG
-
+    
     const liveStream = res.data.items.find(stream => stream.status.lifeCycleStatus === 'live');
 
     if (!liveStream) {
@@ -109,8 +107,6 @@ exports.getLiveChatId = async (accessToken) => {
 exports.getLiveChatMessages = async (accessToken, liveChatId) => {
   try {
 
-      console.log('⛔️ GETTING CHAT MESSAGES!', liveChatId) //!REMOVE
-
       const oauth2Client = new google.auth.OAuth2(
         process.env.YT_CLIENT_ID,
         process.env.YT_CLIENT_SECRET,
@@ -128,7 +124,6 @@ exports.getLiveChatMessages = async (accessToken, liveChatId) => {
         part: 'snippet, authorDetails',
       })
 
-      console.log('⛔️ getLiveChatMessages Res: ', res.data)
 
       return res.data
 
