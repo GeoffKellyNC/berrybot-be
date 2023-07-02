@@ -26,19 +26,33 @@ exports.getGoogleUserData = async (accessToken) => {
 }
 
 exports.getYouTubeData = async (accessToken) => {
+  try{
     const youtube = google.youtube({
-        version: 'v3',
-        auth: accessToken
-      });
-      
-      youtube.channels.list({
-        part: 'snippet,contentDetails,statistics',
-        mine: true
-      }, (err, res) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        return res.data
-      });
+      version: 'v3',
+      auth: accessToken
+    });
+    
+    youtube.channels.list({
+      part: 'snippet,contentDetails,statistics',
+      mine: true
+    }, (err, res) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log('🔐 YOUTUBE DATA: ', res.data) //!ERMOVE
+      return res.data
+    });
+  } catch(error){
+    consoleLoging({
+      id: null,
+      name: 'Server',
+      script: 'models/YouTube/Youtube.js (getYouTubeData)',
+      info: error
+    })
+
+    console.log('🔐 YOUTUBE DATA: ', error) //!REMOVE
+    return false
+  }
+
 }

@@ -46,10 +46,10 @@ router.post('/get-login-data', async (req, res) => {
         const  code  = req.body.code
 
         const tokens = await AuthModel.getGoogleAuthToken(code)
-        const userData = await YouTubeModel.getGoogleUserData(tokens.access_token)
+        // const userData = await YouTubeModel.getGoogleUserData(tokens.access_token)
         const youtubeData = await YouTubeModel.getYouTubeData(tokens.access_token)
 
-        console.log('🔐 USER DATA: ', userData) //!DEBUG
+        // console.log('🔐 USER DATA: ', userData) //!DEBUG
 
         // console.log('🔐 YOUTUBE DATA: ', youtubeData) //!DEBUG
 
