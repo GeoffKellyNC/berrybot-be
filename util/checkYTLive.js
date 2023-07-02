@@ -1,4 +1,4 @@
-const YoutubeModel = require('../models/YoutubeModel');
+const YoutubeModel = require('../models/YouTube/Youtube');
 const { startMessagePolling } = require('../ai/processYTMessage')
 
 const checkYTLive = async (accessToken) => {
