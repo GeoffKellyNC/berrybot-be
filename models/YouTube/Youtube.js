@@ -82,7 +82,7 @@ exports.getLiveChatId = async (accessToken) => {
 
     })
 
-    // console.log('⛔️LIVE CHAT ID: ', res.data.items) //!DEBUG
+    console.log('⛔️LIVE CHAT ID: ', res.data.items) //!DEBUG
 
     const liveStream = res.data.items.find((stream, idx) => {
       if (stream.isDefaultBroadcast){
