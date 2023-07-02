@@ -10,9 +10,9 @@ const startMessagePolling = async (accessToken, chatId) => {
 
             console.log('Message Data: ', messageData) //! REMOVE
 
-            if(messageData){
-                processYTMessage(messageData)
-                return
+            // if(messageData){
+            //     processYTMessage(messageData)
+            //     return
         }
 
         await new Promise(resolve => setTimeout(resolve, 3000));
