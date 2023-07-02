@@ -13,7 +13,7 @@ const startMessagePolling = async (accessToken, chatId) => {
             // if(messageData){
             //     processYTMessage(messageData)
             //     return
-        }
+            // }   
 
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
