@@ -49,13 +49,15 @@ router.post('/get-login-data', async (req, res) => {
 
         console.log('🔐 TOKENS: ', tokens) //!DEBUG
 
-        // const userData = await YouTubeModel.getGoogleUserData(accessToken)
+        const userData = await YouTubeModel.getGoogleUserData(tokens.access_token)
 
-        // const userData = await YouTubeModel.getYouTubeData(accessToken)
+        const payload = {
+            authData: tokens,
+            userData: userData
+        }
+        console.log('🔐 PAYLOAD: ', payload) //!DEBUG
 
-        // console.log('🔐 userData: ', userData) //!DEBUG
-
-        res.status(200).json('ok')
+        res.status(200).json(payload)
         
     } catch (error) {
         consoleLoging({
@@ -64,6 +66,8 @@ router.post('/get-login-data', async (req, res) => {
             script: "routes/youtube/authRoutes.js (POST /get-login-data)",
             info: error
         })
+
+        res.status(500).json(error)
     }
 })
 
