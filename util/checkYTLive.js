@@ -19,7 +19,7 @@ const checkYTLive = async (accessToken) => {
     }
 
     console.log('⛔️ USER IS LIVE!')
-    await startMessagePolling(accessToken, chatId)
+    // await startMessagePolling(accessToken, chatId)
     return chatId
 }
 
