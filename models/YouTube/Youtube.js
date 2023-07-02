@@ -27,22 +27,26 @@ exports.getGoogleUserData = async (accessToken) => {
 
 exports.getYouTubeData = async (accessToken) => {
   try{
-    const youtube = google.youtube({
-      version: 'v3',
-      auth: accessToken
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.YT_CLIENT_ID,
+      process.env.YT_CLIENT_SECRET,
+      process.env.LOCAL_MODE ? process.env.YT_LOCAL_REDIRECT_URI : null
+    );
+
+    oauth2Client.setCredentials({
+      access_token: accessToken,
     });
+
+    const youtube = google.youtube({version: 'v3', auth: oauth2Client});
+    const res = youtube.channels.list({
+      part: 'snippet,contentDetails,statistics',
+      mine: true,
+    });
+
+    return res.data;
+
     
-    youtube.channels.list({
-      part: 'snippet,statistics',
-      mine: true
-    }, (err, res) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log('🔐 YOUTUBE DATA: ', res.data) //!ERMOVE
-      return res.data
-    });
+
   } catch(error){
     consoleLoging({
       id: null,
