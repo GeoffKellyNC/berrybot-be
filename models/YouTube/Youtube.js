@@ -84,20 +84,17 @@ exports.getLiveChatId = async (accessToken) => {
 
     // console.log('⛔️LIVE CHAT ID: ', res.data.items) //!DEBUG
 
-    const liveStream = res.data.items.find((stream, idx) => {
-      if (stream.status.lifeCycleStatus === 'live'){
-        return stream
-      }
-      return false
-    })
-    
-
+    const liveStream = res.data.items.some(stream => stream.status.lifeCycleStatus === 'live');
 
     console.log('⛔️ LIVE STREAM FILTERED ', liveStream )
 
+    
+    if (!liveStream) {
+      return false;
+    }
+  
 
-
-    return liveStream ? liveStream : false
+    return liveStream
 
     
   } catch (error) {
