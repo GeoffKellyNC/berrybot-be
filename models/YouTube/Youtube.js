@@ -27,6 +27,7 @@ exports.getGoogleUserData = async (accessToken) => {
 
 exports.getYouTubeData = async (accessToken) => {
   try{
+    console.log('⛔️ GETTING YOUTUBE DATA: ') //!REMOVE
     const oauth2Client = new google.auth.OAuth2(
       process.env.YT_CLIENT_ID,
       process.env.YT_CLIENT_SECRET,
@@ -43,9 +44,9 @@ exports.getYouTubeData = async (accessToken) => {
       mine: true,
     });
 
-    return res.data;
+    console.log('🔐 YOUTUBE DATA: ', res) //!REMOVE
 
-    
+    return res;
 
   } catch(error){
     consoleLoging({
