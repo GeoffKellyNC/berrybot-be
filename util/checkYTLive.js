@@ -11,10 +11,10 @@ const checkYTLive = async (accessToken) => {
         const liveStream = await YoutubeModel.getLiveChatId(accessToken);
 
         console.log('⛔️ Live Stream Check: ', liveStream) //!REMOVE
-        
+
         if(liveStream) {
             isLive = true;
-            chatId = liveStream.id
+            chatId = liveStream.liveChatId
         }
 
         await new Promise(resolve => setTimeout(resolve, 3000));
