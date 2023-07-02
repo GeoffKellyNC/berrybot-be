@@ -33,7 +33,7 @@ exports.getYouTubeData = async (accessToken) => {
     });
     
     youtube.channels.list({
-      part: 'snippet',
+      part: 'snippet,statistics',
       mine: true
     }, (err, res) => {
       if (err) {
