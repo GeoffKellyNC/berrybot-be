@@ -44,9 +44,9 @@ exports.getYouTubeData = async (accessToken) => {
       mine: true,
     });
 
-    console.log('🔐 YOUTUBE DATA: ', res.config.data) //!REMOVE
+    console.log('🔐 YOUTUBE DATA: ', res.config) //!REMOVE
 
-    return res.config.data;
+    return res.config;
 
   } catch(error){
     consoleLoging({
