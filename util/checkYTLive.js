@@ -14,7 +14,7 @@ const checkYTLive = async (accessToken) => {
 
         if(liveStream) {
             isLive = true;
-            chatId = liveStream.liveChatId
+            chatId = liveStream.snippet.liveChatId
         }
 
         await new Promise(resolve => setTimeout(resolve, 3000));
