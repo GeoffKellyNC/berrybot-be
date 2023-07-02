@@ -82,9 +82,9 @@ exports.getLiveChatId = (accessToken) => {
 
     })
 
-    console.log('⛔️LIVE CHAT ID: ', res.data.items[0].snippet.liveChatId) //!DEBUG
+    console.log('⛔️LIVE CHAT ID: ', res.data) //!DEBUG
 
-    return res.data.items[0].snippet.liveChatId ? res.data.items[0].snippet.liveChatId : false
+    // return res.data.items[0].snippet.liveChatId ? res.data.items[0].snippet.liveChatId : false
 
     
   } catch (error) {
