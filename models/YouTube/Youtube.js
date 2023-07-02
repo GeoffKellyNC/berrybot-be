@@ -82,12 +82,17 @@ exports.getLiveChatId = async (accessToken) => {
 
     })
 
-    console.log('⛔️LIVE CHAT ID: ', res.data) //!DEBUG
+    // console.log('⛔️LIVE CHAT ID: ', res.data.items) //!DEBUG
+
+    const liveStream = res.data.items.find((stream, idx) => {
+      if (stream.isDefaultBroadcast){
+        return stream
+      }
+    })
+    
 
 
-    console.log('⛔️ SAMPLE SNIPPET DATA: ', res.data.items[0].snippet )
-    console.log('⛔️ SAMPLE Status DATA: ', res.data.items[0].status )
-    console.log('⛔️ SAMPLE contentDetails DATA: ', res.data.items[0].contentDetails )
+    console.log('⛔️ LIVE STREAM FILTERED ', liveStream )
 
 
 
