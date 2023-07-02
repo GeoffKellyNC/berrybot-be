@@ -3,6 +3,7 @@ const { mongo } = require('../../db/mongo_config')
 const axios = require('axios')
 const consoleLoging = require('../../helpers/consoleLoging')
 const { google } = require('googleapis');
+const { oauth2 } = require("googleapis/build/src/apis/oauth2");
 
 
 exports.getGoogleUserData = async (accessToken) => {
@@ -27,7 +28,6 @@ exports.getGoogleUserData = async (accessToken) => {
 
 exports.getYouTubeData = async (accessToken) => {
   try{
-    console.log('⛔️ GETTING YOUTUBE DATA: ') //!REMOVE
     const oauth2Client = new google.auth.OAuth2(
       process.env.YT_CLIENT_ID,
       process.env.YT_CLIENT_SECRET,
@@ -44,7 +44,6 @@ exports.getYouTubeData = async (accessToken) => {
       mine: true,
     });
 
-    console.log('🔐 YOUTUBE DATA: ', res) //!REMOVE
 
     return res;
 
@@ -56,8 +55,81 @@ exports.getYouTubeData = async (accessToken) => {
       info: error
     })
 
-    console.log('🔐 YOUTUBE DATA: ', error) //!REMOVE
     return false
   }
 
 }
+
+exports.getLiveChatId = (accessToken) => {
+  try {
+
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.YT_CLIENT_ID,
+      process.env.YT_CLIENT_SECRET,
+      process.env.LOCAL_MODE ?  process.env.LOCAL_MODE : null
+    )
+
+    oauth2Client.setCredentials({
+      access_token: accessToken
+    })
+
+    const youtube = google.youtube({version: 'v3', auth: oauth2Client})
+
+    const res = youtube.liveBroadcasts.list({
+      part: 'snippet,contentDetails,status',
+      mine: true,
+      broadcastStatus: 'active'
+    })
+
+    console.log('⛔️LIVE CHAT ID: ', res.data.items[0].snippet.liveChatId) //!DEBUG
+
+    return res.data.items[0].snippet.liveChatId ? res.data.items[0].snippet.liveChatId : false
+
+    
+  } catch (error) {
+    consoleLoging({
+      id: 'ERROR',
+      user: 'Server',
+      script: 'models/YouTube/YouTube.js',
+      info: error
+    })
+
+    return false
+  }
+}
+
+exports.getLiveChatMessages = async (accessToken, liveChatId) => {
+  try {
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.YT_CLIENT_ID,
+        process.env.YT_CLIENT_SECRET,
+        process.env.LOCAL_MODE ?  process.env.LOCAL_MODE : null
+      )
+
+      oauth2Client.setCredentials({
+        access_token: accessToken
+      })
+
+      const youtube = google.youtube({version: 'v3', auth: oauth2Client})
+
+      const res =  youtube.liveChatMessages.list({
+        liveChatId,
+        part: 'snippet,authorDetails',
+        maxResults: 2000
+      })
+
+      return res.data.items
+
+  } catch (error) {
+    consoleLoging({
+      id: 'ERROR',
+      user: 'Server',
+      script: 'models/YouTube/YouTube.js',
+      info: error
+    })
+
+    return false
+  }
+}
+
+

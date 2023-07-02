@@ -3,6 +3,7 @@ const consoleLoging = require('../../helpers/consoleLoging');
 const router = express.Router();
 const AuthModel = require('../../models/YouTube/AuthYT')
 const YouTubeModel = require('../../models/YouTube/Youtube')
+const checkYTLive = require('../../util/checkYTLive');
 
 
 
@@ -26,9 +27,22 @@ router.get('/login-youtube', async (req, res) => {
 router.post('/login-youtube', async (req, res) => {
     try {
 
-        const code = req.body
+        const  code  = req.body.code
 
-        console.log('⛔️ code: ', code) //!DEBUG
+        const tokens = await AuthModel.getGoogleAuthToken(code)
+        const userData = await YouTubeModel.getGoogleUserData(tokens.access_token)
+        const youtubeData = await YouTubeModel.getYouTubeData(tokens.access_token)
+
+        checkYTLive(tokens.access_token)
+
+        const payload = {
+            authData: tokens,
+            userData: userData,
+            youtubeData: youtubeData
+        }
+
+        res.status(200).json(payload)
+
         
     } catch (error) {
         consoleLoging({
@@ -38,40 +52,11 @@ router.post('/login-youtube', async (req, res) => {
             info: error
         })
 
-    }
-})
-
-router.post('/get-login-data', async (req, res) => {
-    try {
-        const  code  = req.body.code
-
-        const tokens = await AuthModel.getGoogleAuthToken(code)
-        const userData = await YouTubeModel.getGoogleUserData(tokens.access_token)
-        const youtubeData = await YouTubeModel.getYouTubeData(tokens.access_token)
-
-        // console.log('🔐 USER DATA: ', userData) //!DEBUG
-
-        // console.log('🔐 YOUTUBE DATA: ', youtubeData) //!DEBUG
-
-        const payload = {
-            authData: tokens,
-            userData: userData,
-            youtubeData: youtubeData
-        }
-        console.log('🔐 PAYLOAD: ', payload) //!DEBUG
-
-        res.status(200).json(payload)
-        
-    } catch (error) {
-        consoleLoging({
-            id: "ERROR",
-            name: "Server",
-            script: "routes/youtube/authRoutes.js (POST /get-login-data)",
-            info: error
-        })
-
         res.status(500).json(error)
+
     }
 })
+
+
 
 module.exports = router; 
