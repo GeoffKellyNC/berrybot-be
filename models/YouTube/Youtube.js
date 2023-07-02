@@ -88,7 +88,7 @@ exports.getLiveChatId = async (accessToken) => {
 
     console.log('⛔️ LIVE STREAM FILTERED ', liveStream )
 
-    
+
     if (!liveStream) {
       return false;
     }
@@ -129,13 +129,13 @@ exports.getLiveChatMessages = async (accessToken, liveChatId) => {
         maxResults: 2000
       })
 
-      return res.data.items
+      return res.data
 
   } catch (error) {
     consoleLoging({
       id: 'ERROR',
       user: 'Server',
-      script: 'models/YouTube/YouTube.js',
+      script: 'models/YouTube/YouTube.js (getLiveChatMessages())',
       info: error
     })
 
