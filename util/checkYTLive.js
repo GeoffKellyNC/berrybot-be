@@ -9,7 +9,9 @@ const checkYTLive = async (accessToken) => {
     while(!isLive) {
         console.log('🚧 NOT LIVE CHECKING AGAIN....') //!REMOVE
         const liveStream = await YoutubeModel.getLiveChatId(accessToken);
+
         console.log('⛔️ Live Stream Check: ', liveStream) //!REMOVE
+        
         if(liveStream) {
             isLive = true;
             chatId = liveStream.id

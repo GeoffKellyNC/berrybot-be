@@ -86,9 +86,6 @@ exports.getLiveChatId = async (accessToken) => {
 
     const liveStream = res.data.items.find(stream => stream.status.lifeCycleStatus === 'live');
 
-    console.log('⛔️ LIVE STREAM FILTERED ', liveStream )
-
-
     if (!liveStream) {
       return false;
     }
@@ -126,11 +123,12 @@ exports.getLiveChatMessages = async (accessToken, liveChatId) => {
 
       const youtube = google.youtube({version: 'v3', auth: oauth2Client})
 
-      const res =  youtube.liveChatMessages.list({
+      const res =  await youtube.liveChatMessages.list({
         liveChatId: liveChatId,
         part: 'snippet, authorDetails',
-        maxResults: 2000
       })
+
+      console.log('⛔️ getLiveChatMessages Res: ', res.data)
 
       return res.data
 
