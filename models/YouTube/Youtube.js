@@ -78,7 +78,8 @@ exports.getLiveChatId = (accessToken) => {
     const res = youtube.liveBroadcasts.list({
       part: 'snippet',
       mine: true,
-      broadcastStatus: 'active'
+      broadcastType: 'all'
+
     })
 
     console.log('⛔️LIVE CHAT ID: ', res.data.items[0].snippet.liveChatId) //!DEBUG
