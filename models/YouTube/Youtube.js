@@ -60,7 +60,7 @@ exports.getYouTubeData = async (accessToken) => {
 
 }
 
-exports.getLiveChatId = (accessToken) => {
+exports.getLiveChatId = async (accessToken) => {
   try {
 
     const oauth2Client = new google.auth.OAuth2(
@@ -75,7 +75,7 @@ exports.getLiveChatId = (accessToken) => {
 
     const youtube = google.youtube({version: 'v3', auth: oauth2Client})
 
-    const res = youtube.liveBroadcasts.list({
+    const res = await youtube.liveBroadcasts.list({
       part: 'snippet',
       mine: true,
       broadcastType: 'all'
