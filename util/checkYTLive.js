@@ -19,9 +19,9 @@ const checkYTLive = async (accessToken) => {
             IS_LIVE = true;
             chatId = liveStream.snippet.liveChatId
 
-            setInterval(() => {
+            setInterval( async () => {
                 console.log('🚧 CHECKING IF USER IS STILL LIVE....') //!REMOVE
-                const stillLive = YoutubeModel.getLiveChatId(accessToken)
+                const stillLive = await YoutubeModel.getLiveChatId(accessToken)
                 console.log('⛔️ STILL LIVE CHECK: ', stillLive) //!REMOVE
                 if(!stillLive) {
                     console.log('⛔️ USER IS NO LONGER LIVE!') //!REMOVE
