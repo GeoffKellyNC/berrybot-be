@@ -22,9 +22,11 @@ const checkYTLive = async (accessToken) => {
             setInterval(() => {
                 console.log('🚧 CHECKING IF USER IS STILL LIVE....') //!REMOVE
                 const stillLive = YoutubeModel.getLiveChatId(accessToken)
+                console.log('⛔️ STILL LIVE CHECK: ', stillLive) //!REMOVE
                 if(!stillLive) {
                     console.log('⛔️ USER IS NO LONGER LIVE!') //!REMOVE
                     IS_LIVE = false
+                    startMessagePolling(accessToken, chatId, false) //!REMOVE
                 }
             }, 10000)
         }

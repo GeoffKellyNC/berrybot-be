@@ -8,7 +8,14 @@ const queue = new Queue()
 const POLLING = true
 
 
-const startMessagePolling = async (accessToken, chatId) => {
+const startMessagePolling = async (accessToken, chatId, type = true) => {
+
+    if(!type) {
+        console.log('⛔️ STOPPING POLLING!') //!REMOVE
+        POLLING = false
+        return false
+    }
+
     try {
         console.log('⛔️ Starting Messgae Polling!') //!REMOVE
         processYTMessage()
