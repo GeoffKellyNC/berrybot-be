@@ -10,7 +10,8 @@ const startMessagePolling = async (accessToken, chatId) => {
         let messageArray = []
         while(true){
             const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
-            messageData.items.forEach(item => {
+            messageData.items.forEach((item) => {
+                console.log('ITEM SNIPPET: ', item.snippet) //!REMOVE
                 const exists = messageArray.some(chat => item.snippet.id === chat.messageId)
 
                 if (!exists){
@@ -48,6 +49,7 @@ const startMessagePolling = async (accessToken, chatId) => {
 const processYTMessage = async (message) => {
     try {
         console.log('⛔️ Messages to Process: ', message)
+        return
 
     } catch (error) {
         consoleLoging({
