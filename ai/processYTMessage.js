@@ -5,7 +5,7 @@ const Queue = require('../models/Twitch/Queue')
 
 const queue = new Queue()
 
-const POLLING = true
+let POLLING = true
 
 
 const startMessagePolling = async (accessToken, chatId, type = true) => {
