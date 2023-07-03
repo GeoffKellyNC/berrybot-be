@@ -5,12 +5,14 @@ const Queue = require('../models/Twitch/Queue')
 
 const queue = new Queue()
 
+const POLLING = true
+
 
 const startMessagePolling = async (accessToken, chatId) => {
     try {
         console.log('⛔️ Starting Messgae Polling!') //!REMOVE
         processYTMessage()
-        while(true){
+        while(POLLING){
             console.log('🚧 Getting Messages') //!REMOVE
             const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
             messageData.items.forEach((item) => {
