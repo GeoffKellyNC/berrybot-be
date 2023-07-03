@@ -10,6 +10,7 @@ const startMessagePolling = async (accessToken, chatId, type = true) => {
     if (!type) {
         console.log('⛔️ STOPPING POLLING!') //!REMOVE
         POLLING = false
+        processYTMessage(false)
         return false
     }
 
