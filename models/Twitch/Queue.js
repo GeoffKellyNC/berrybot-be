@@ -15,6 +15,16 @@ class Queue {
     size() {
         return this.items.length;
     }
+
+    exists(itemId){
+        return this.items.some(item => item.messageId === itemId)
+    }
+
+    show() {
+        console.log('QUEUE: ',this.items);
+        return
+    }
+
 }
 
 module.exports = Queue;
