@@ -27,6 +27,7 @@ const checkYTLive = async (accessToken) => {
                     console.log('⛔️ USER IS NO LONGER LIVE!') //!REMOVE
                     IS_LIVE = false
                     startMessagePolling(accessToken, chatId, false) //!REMOVE
+                    checkYTLive(accessToken) //!REMOVE
                 }
             }, 10000)
         }

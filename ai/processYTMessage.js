@@ -18,7 +18,7 @@ const startMessagePolling = async (accessToken, chatId, type = true) => {
 
     try {
         console.log('⛔️ Starting Messgae Polling!') //!REMOVE
-        processYTMessage()
+        processYTMessage(type)
         while(POLLING){
             console.log('🚧 Getting Messages') //!REMOVE
             const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
@@ -57,8 +57,14 @@ const startMessagePolling = async (accessToken, chatId, type = true) => {
 }
 
 
-const processYTMessage = async () => {
+const processYTMessage = async (type) => {
     try {
+
+        if (!type) {
+            console.log('⛔️ STOPPING PROCESSING!') //!REMOVE
+            return false
+        }
+
         if(queue.size() > 0){
             const message = queue.dequeue()
             console.log('⛔️ Processing Message: ', message) //!REMOVE
