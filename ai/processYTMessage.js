@@ -1,4 +1,3 @@
-const { chat } = require('googleapis/build/src/apis/chat')
 const YouTubeModel = require('../models/YouTube/Youtube')
 const consoleLoging = require('../helpers/consoleLoging')
 const Queue = require('../models/Twitch/Queue')
@@ -7,26 +6,24 @@ const queue = new Queue()
 
 let POLLING = true
 
-
 const startMessagePolling = async (accessToken, chatId, type = true) => {
-
-    if(!type) {
+    if (!type) {
         console.log('⛔️ STOPPING POLLING!') //!REMOVE
         POLLING = false
         return false
     }
 
     try {
-        console.log('⛔️ Starting Messgae Polling!') //!REMOVE
+        console.log('⛔️ Starting Message Polling!') //!REMOVE
         processYTMessage(type)
-        while(POLLING){
+        while (POLLING) {
             console.log('🚧 Getting Messages') //!REMOVE
-            const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
+            const messageData = await YouTubeModel.getLiveChatMessages(accessToken, chatId)
             messageData.items.forEach((item) => {
                 const exists = queue.exists(item.id)
                 const isProcessed = queue.isProcessed(item.id)
 
-                if (!exists && !isProcessed){
+                if (!exists && !isProcessed) {
                     const newMessage = {
                         messageId: item.id,
                         user: item.authorDetails.displayName,
@@ -39,11 +36,10 @@ const startMessagePolling = async (accessToken, chatId, type = true) => {
                     }
                     queue.set_into_queue(newMessage)
                 }
-            }) 
+            })
 
-        await new Promise(resolve => setTimeout(resolve, messageData.pollingIntervalMillis));
-    }
-        
+            await new Promise(resolve => setTimeout(resolve, messageData.pollingIntervalMillis))
+        }
     } catch (error) {
         consoleLoging({
             id: "ERROR",
@@ -56,25 +52,22 @@ const startMessagePolling = async (accessToken, chatId, type = true) => {
     }
 }
 
-
 const processYTMessage = async (type) => {
     try {
-
         if (!type) {
             console.log('⛔️ STOPPING PROCESSING!') //!REMOVE
             return false
         }
 
-        if(queue.size() > 0){
+        if (queue.size() > 0) {
             const message = queue.dequeue()
             console.log('⛔️ Processing Message: ', message) //!REMOVE
 
             queue.setProcessed(message.messageId)
         }
         console.log('No more messages to process!') //!REMOVE
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        processYTMessage()
-
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        processYTMessage(type)
     } catch (error) {
         consoleLoging({
             id: "ERROR",
@@ -83,8 +76,7 @@ const processYTMessage = async (type) => {
             info: error
         })
     }
-};
-
+}
 
 module.exports = {
     startMessagePolling
