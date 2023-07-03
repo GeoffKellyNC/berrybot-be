@@ -3,17 +3,18 @@ const YouTubeModel = require('../models/YouTube/Youtube')
 const consoleLoging = require('../helpers/consoleLoging')
 const Queue = require('../models/Twitch/Queue')
 
+const queue = new Queue()
+
 
 const startMessagePolling = async (accessToken, chatId) => {
     try {
         console.log('⛔️ Starting Messgae Polling!') //!REMOVE
-        let messageArray = []
+        processYTMessage()
         while(true){
+            console.log('🚧 Getting Messages') //!REMOVE
             const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
             messageData.items.forEach((item) => {
-                console.log('FULL ITEM: ', item) //!REMOVE
-                console.log('ITEM SNIPPET: ', item.snippet) //!REMOVE
-                const exists = messageArray.some(chat => item.id === chat.messageId)
+                const exists = queue.exists(item.id)
 
                 if (!exists){
                     const newMessage = {
@@ -26,8 +27,7 @@ const startMessagePolling = async (accessToken, chatId) => {
                         sender_img: item.authorDetails.profileImageUrl,
                         chatSponsor: item.authorDetails.isChatSponsor
                     }
-                    messageArray.push(newMessage)
-                    processYTMessage(newMessage)
+                    queue.set_into_queue(newMessage)
                 }
             }) 
 
@@ -47,10 +47,15 @@ const startMessagePolling = async (accessToken, chatId) => {
 }
 
 
-const processYTMessage = async (message) => {
+const processYTMessage = async () => {
     try {
-        console.log('⛔️ Messages to Process: ', message)
-        return
+        if(queue.size() > 0){
+            const message = queue.dequeue()
+            console.log('⛔️ Processing Message: ', message) //!REMOVE
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        processYTMessage()
 
     } catch (error) {
         consoleLoging({
