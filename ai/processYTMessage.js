@@ -11,6 +11,7 @@ const startMessagePolling = async (accessToken, chatId) => {
         while(true){
             const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
             messageData.items.forEach((item) => {
+                console.log('FULL ITEM: ', item) //!REMOVE
                 console.log('ITEM SNIPPET: ', item.snippet) //!REMOVE
                 const exists = messageArray.some(chat => item.snippet.id === chat.messageId)
 
