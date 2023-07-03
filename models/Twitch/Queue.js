@@ -2,6 +2,7 @@
 class Queue {
     constructor() {
         this.items = [];
+        this.processed = [];
     }
 
     set_into_queue(item) {
@@ -23,6 +24,13 @@ class Queue {
     show() {
         console.log('QUEUE: ',this.items);
         return
+    }
+    setProcessed(id){
+        this.processed.push(id)
+    }
+
+    isProcessed(id){
+        return this.processed.includes(id)
     }
 
 }

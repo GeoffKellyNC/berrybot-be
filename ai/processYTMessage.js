@@ -15,8 +15,9 @@ const startMessagePolling = async (accessToken, chatId) => {
             const messageData = await YouTubeModel.getLiveChatMessages(accessToken,chatId)
             messageData.items.forEach((item) => {
                 const exists = queue.exists(item.id)
+                const isProcessed = queue.isProcessed(item.id)
 
-                if (!exists){
+                if (!exists && !isProcessed){
                     const newMessage = {
                         messageId: item.id,
                         user: item.authorDetails.displayName,
@@ -52,8 +53,10 @@ const processYTMessage = async () => {
         if(queue.size() > 0){
             const message = queue.dequeue()
             console.log('⛔️ Processing Message: ', message) //!REMOVE
-        }
 
+            queue.setProcessed(message.messageId)
+        }
+        console.log('No more messages to process!') //!REMOVE
         await new Promise(resolve => setTimeout(resolve, 1000));
         processYTMessage()
 
