@@ -13,11 +13,11 @@ const startMessagePolling = async (accessToken, chatId) => {
             messageData.items.forEach((item) => {
                 console.log('FULL ITEM: ', item) //!REMOVE
                 console.log('ITEM SNIPPET: ', item.snippet) //!REMOVE
-                const exists = messageArray.some(chat => item.snippet.id === chat.messageId)
+                const exists = messageArray.some(chat => item.id === chat.messageId)
 
                 if (!exists){
                     const newMessage = {
-                        messageId: item.snippet.id,
+                        messageId: item.id,
                         user: item.authorDetails.displayName,
                         message: item.snippet.textMessageDetails.messageText,
                         isOwner: item.authorDetails.isChatOwner,
