@@ -49,7 +49,12 @@ async function processQueue(chatClient, channel, user, queueObj){
         'self-harm': 3,
         'sexual/minors': 5,
         'hate/threatening': 2,
-        'violence/graphic': 1
+        'violence/graphic': 1,
+        harassment: 1,
+        'harassment/threatening': 2,
+        'self-harm/intent': 2,
+        'self-harm/instruction': 2,
+
     }
 
     queue.set_into_queue(queueObj);

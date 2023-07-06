@@ -1,5 +1,5 @@
 const YoutubeModel = require('../models/YouTube/Youtube');
-const { startMessagePolling } = require('../ai/processYTMessage')
+const startMessagePolling = require('../ai/processYTMessage')
 
 
 let IS_LIVE = false
